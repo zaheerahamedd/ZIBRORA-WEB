@@ -1580,13 +1580,11 @@ function placeOrder() {
   const pincode = document.getElementById('coPincode').value.trim();
   if (!name || !phone || !address || !city) { showToast('Please fill all required fields'); return; }
   if (!cart.length) { showToast('Your cart is empty'); return; }
-
   const payment = document.getElementById('coPayment').value;
   const subtotal = cart.reduce((s,c)=>s+c.price*c.qty,0);
   const shipping = subtotal > 999 ? 0 : 99;
   const total = subtotal + shipping;
   const orderId = 'ZIB' + Date.now();
-
   if (SHEET_WEB_APP_URL && SHEET_WEB_APP_URL !== 'PASTE_YOUR_DEPLOYED_URL_HERE') {
     fetch(SHEET_WEB_APP_URL, {
       method: 'POST',
@@ -1595,12 +1593,7 @@ function placeOrder() {
       body: JSON.stringify({ name, phone, address, city, pincode, payment, orderId, total })
     }).catch(() => {});
   }
-
   pushPurchase(orderId, total, payment);
-  cart = [];
-  updateCartUI();
-  navigate('/thankyou/' + orderId);
-}
   cart = [];
   updateCartUI();
   navigate('/thankyou/' + orderId);
