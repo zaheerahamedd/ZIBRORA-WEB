@@ -1,0 +1,1633 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script src="https://assets.adobedtm.com/de3a66fdc88b/e7e2a9e0fdca/launch-34889bcf768e-development.min.js" async></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ZIBRORA — Shop Better</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #2874F0;
+    --primary-dark: #1A56C4;
+    --accent: #2874F0;
+    --gold: #FFE500;
+    --dark: #172337;
+    --dark2: #212121;
+    --white: #ffffff;
+    --gray: #F1F3F6;
+    --gray2: #DCDCDC;
+    --text: #212121;
+    --text2: #878787;
+    --success: #388E3C;
+    --danger: #FF6161;
+    --shadow: 0 2px 6px rgba(0,0,0,0.16);
+    --radius: 2px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family:'Inter',sans-serif; background: var(--white); color: var(--text); min-height:100vh; }
+  a { color: inherit; }
+
+  /* MOVING PROMO BANNER (marquee) */
+  .marquee-bar { background: var(--gold); overflow:hidden; white-space:nowrap; border-bottom:1px solid #e6cf00; }
+  .marquee-track { display:inline-block; padding-left:100%; animation: marquee-scroll 22s linear infinite; }
+  .marquee-track span { display:inline-block; padding:7px 40px; font-size:12.5px; font-weight:700; letter-spacing:.3px; color:var(--dark2); }
+  .marquee-bar:hover .marquee-track { animation-play-state: paused; }
+  @keyframes marquee-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+
+  /* TOP UTILITY BAR */
+  .topbar { background: var(--dark); color:#cfc9bd; font-size:12px; }
+  .topbar-inner { max-width:1140px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:9px 24px; gap:16px; flex-wrap:wrap; }
+  .topbar-left, .topbar-right { display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
+  .topbar-center { color:#cfc9bd; font-weight:500; letter-spacing:.2px; }
+  .topbar-right a { text-decoration:none; color:#cfc9bd; cursor:pointer; }
+  .topbar-right a:hover { color:var(--accent); }
+  .topbar span { white-space:nowrap; }
+
+  /* HEADER */
+  header { background: var(--white); border-bottom:1px solid var(--gray2); position:sticky; top:0; z-index:100; }
+  .header-main { max-width:1140px; margin:0 auto; display:flex; align-items:center; gap:28px; padding:18px 24px; }
+  .logo { display:flex; align-items:center; text-decoration:none; flex-shrink:0; cursor:pointer; }
+  .logo-text .name { font-family:'Sora',sans-serif; font-weight:800; font-size:24px; letter-spacing:2px; color:var(--text); }
+  .search-bar { flex:1; max-width:640px; display:flex; align-items:center; background:var(--white); border:1.5px solid var(--gray2); border-radius:var(--radius); padding:0 0 0 16px; gap:10px; }
+  .search-bar:focus-within { border-color:var(--text); }
+  .search-bar input { flex:1; border:none; background:transparent; outline:none; font-size:14px; padding:11px 0; color:var(--text); }
+  .search-bar svg { color:#fff; flex-shrink:0; cursor:pointer; background:var(--dark); padding:11px; box-sizing:content-box; }
+  .header-actions { display:flex; align-items:center; gap:26px; margin-left:auto; }
+  .btn-cart, .btn-form-open { background:none; border:none; padding:0; font-weight:600; font-size:12px; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:4px; position:relative; color:var(--text); letter-spacing:.3px; }
+  .btn-cart:hover, .btn-form-open:hover { color:var(--accent); }
+  .header-actions .icon-glyph { font-size:19px; line-height:1; }
+  .cart-badge { position:absolute; top:-8px; right:-10px; background:var(--accent); color:#fff; border-radius:50%; width:17px; height:17px; font-size:10px; display:flex; align-items:center; justify-content:center; font-weight:700; }
+
+  nav { background: var(--white); border-bottom:1px solid var(--gray2); }
+  .nav-inner-wrap { max-width:1140px; margin:0 auto; display:flex; align-items:center; gap:26px; padding:0 24px; overflow-x:auto; }
+  .nav-hamburger { display:flex; align-items:center; gap:8px; padding:13px 0; font-size:12.5px; font-weight:700; letter-spacing:.5px; color:var(--text); white-space:nowrap; cursor:pointer; border-right:1px solid var(--gray2); padding-right:22px; }
+  .nav-inner { display:flex; align-items:center; gap:22px; overflow-x:auto; }
+  .nav-btn { background:none; border:none; cursor:pointer; padding:13px 0; font-size:12.5px; font-weight:600; letter-spacing:.4px; color:var(--text2); white-space:nowrap; text-transform:uppercase; border-bottom:2px solid transparent; }
+  .nav-btn:hover { color:var(--text); }
+  .nav-btn.active { color:var(--text); border-bottom-color:var(--accent); }
+  .breadcrumb { max-width:1140px; margin:0 auto; padding:14px 24px 0; font-size:13px; color:var(--text2); }
+  .breadcrumb a { color:var(--text2); text-decoration:none; cursor:pointer; }
+  .breadcrumb a:hover { color:var(--primary); }
+  .breadcrumb .sep { margin:0 6px; }
+  .breadcrumb .current { color:var(--text); font-weight:600; }
+
+  /* HERO */
+  .hero { background: var(--gray); min-height:440px; position:relative; overflow:hidden; }
+  .hero-inner { max-width:1140px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; align-items:stretch; min-height:440px; }
+  .hero-content { padding:0 48px; position:relative; z-index:1; display:flex; flex-direction:column; justify-content:center; }
+  .hero-badge { font-size:12px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--accent); margin-bottom:16px; }
+  .hero h1 { font-family:'Sora',sans-serif; font-size:clamp(30px,4.2vw,46px); font-weight:700; color:var(--text); line-height:1.15; margin-bottom:18px; }
+  .hero h1 span { color: var(--accent); }
+  .hero p { color:var(--text2); font-size:15px; max-width:420px; line-height:1.7; margin-bottom:28px; }
+  .hero-btns { display:flex; gap:14px; flex-wrap:wrap; align-items:center; }
+  .btn-primary { background:var(--primary); color:#fff; border:none; border-radius:var(--radius); padding:15px 34px; font-size:13px; font-weight:700; letter-spacing:1px; text-transform:uppercase; cursor:pointer; }
+  .btn-primary:hover { background:var(--primary-dark); }
+  .btn-outline { background:transparent; color:var(--text); border:1.5px solid var(--text); border-radius:var(--radius); padding:14px 32px; font-size:13px; font-weight:700; letter-spacing:1px; text-transform:uppercase; cursor:pointer; }
+  .btn-outline:hover { background:var(--text); color:#fff; }
+  .hero-img-wrap { position:relative; overflow:hidden; }
+  .hero-img-wrap img { width:100%; height:100%; object-fit:cover; display:block; }
+  .hero-arrow { position:absolute; top:50%; transform:translateY(-50%); width:38px; height:38px; border-radius:50%; background:rgba(255,255,255,.9); border:none; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; z-index:2; }
+  .hero-arrow.prev { left:16px; } .hero-arrow.next { right:16px; }
+  .hero-dots { position:absolute; bottom:18px; left:50%; transform:translateX(-50%); display:flex; gap:7px; z-index:2; }
+  .hero-dots span { width:7px; height:7px; border-radius:50%; background:rgba(255,255,255,.55); cursor:pointer; }
+  .hero-dots span.active { background:#fff; width:20px; border-radius:4px; }
+  @media (max-width:900px){ .hero-inner{ grid-template-columns:1fr; } .hero-img-wrap{ min-height:260px; } .hero-content{ padding:40px 24px; } }
+
+  /* CATEGORY ICON STRIP */
+  .cat-strip { max-width:1140px; margin:0 auto; padding:34px 24px 8px; display:flex; gap:28px; overflow-x:auto; }
+  .cat-strip-item { display:flex; flex-direction:column; align-items:center; gap:10px; cursor:pointer; flex-shrink:0; width:76px; text-align:center; }
+  .cat-strip-icon { width:64px; height:64px; border-radius:50%; background:var(--gray); display:flex; align-items:center; justify-content:center; font-size:26px; border:1px solid var(--gray2); transition:border-color .2s; }
+  .cat-strip-item:hover .cat-strip-icon { border-color:var(--accent); }
+  .cat-strip-item span.lbl { font-size:11.5px; font-weight:600; color:var(--text2); }
+
+  .main { max-width:1140px; margin:0 auto; padding:36px 24px; }
+  .section-header { display:flex; align-items:baseline; justify-content:space-between; }
+  .section-header h2 { font-family:'Sora',sans-serif; font-size:22px; font-weight:800; letter-spacing:.5px; text-transform:uppercase; }
+  .section-header .view-all { font-size:13px; font-weight:700; color:var(--text2); text-decoration:none; cursor:pointer; letter-spacing:.3px; }
+  .section-header .view-all:hover { color:var(--accent); }
+  .section-sub { color:var(--text2); font-size:14px; margin:6px 0 20px; }
+  .filters-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:22px; gap:12px; flex-wrap:wrap; }
+  .results-count { font-size:14px; color:var(--text2); }
+  .results-count strong { color:var(--text); }
+  .sort-select { border:1.5px solid var(--gray2); border-radius:var(--radius); padding:8px 14px; font-size:14px; background:#fff; cursor:pointer; outline:none; }
+
+  .product-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:22px 20px; }
+  .reco-section { margin-top:44px; padding-top:32px; border-top:1px solid var(--gray2); }
+  .reco-grid { grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); }
+  .product-card { background:#fff; border-radius:var(--radius); overflow:hidden; transition:transform .2s; cursor:pointer; position:relative; }
+  .product-card:hover { transform:translateY(-5px); box-shadow:0 14px 32px rgba(15,23,42,.12); }
+  .product-img { position:relative; aspect-ratio:0.85; overflow:hidden; background:linear-gradient(145deg,#f8fafc,#eef2f7); display:flex; align-items:center; justify-content:center; }
+  .product-img img { width:100%; height:100%; object-fit:cover; transition:transform .35s, filter .35s; }
+  .product-img img { background:#f8fafc; }
+  .product-card:hover .product-img img { transform:scale(1.055); filter:saturate(1.04); }
+  .badge { position:absolute; top:10px; left:10px; border-radius:2px; padding:3px 9px; font-size:10.5px; font-weight:700; letter-spacing:.5px; color:#fff; text-transform:uppercase; }
+  .badge-sale { background:var(--danger); }
+  .badge-new { background:var(--text); }
+  .wishlist-btn { position:absolute; top:10px; right:10px; background:#fff; border:none; border-radius:50%; width:30px; height:30px; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.12); font-size:15px; opacity:0; transition:opacity .2s; }
+  .product-card:hover .wishlist-btn { opacity:1; }
+  .product-info { padding:14px 2px 4px; }
+  .product-category { font-size:10.5px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--text2); margin-bottom:4px; }
+  .product-name { font-size:14px; font-weight:600; margin-bottom:8px; line-height:1.4; }
+  .product-rating { display:flex; align-items:center; gap:5px; font-size:12px; color:var(--text2); margin-bottom:8px; }
+  .stars { color:var(--gold); letter-spacing:-1px; }
+  .product-price { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+  .price-current { font-size:15px; font-weight:800; }
+  .price-old { font-size:12.5px; color:var(--text2); text-decoration:line-through; }
+  .btn-add-cart { width:100%; background:#fff; color:var(--text); border:1.5px solid var(--text); border-radius:var(--radius); padding:10px 0; font-size:12px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; cursor:pointer; }
+  .btn-add-cart:hover { background:var(--text); color:#fff; }
+  .btn-add-cart.added { background:var(--success); color:#fff; border-color:var(--success); }
+
+  /* PRODUCT DETAIL PAGE */
+  .pdp { display:grid; grid-template-columns:1fr 1fr; gap:48px; }
+  .pdp-img { border-radius:var(--radius); overflow:hidden; aspect-ratio:1; background:var(--gray2); }
+  .pdp-img img { width:100%; height:100%; object-fit:cover; }
+  .pdp-cat { color:var(--primary); font-weight:700; font-size:12px; letter-spacing:1px; text-transform:uppercase; margin-bottom:10px; }
+  .pdp-title { font-family:'Sora',sans-serif; font-size:30px; font-weight:800; margin-bottom:12px; }
+  .pdp-rating { display:flex; align-items:center; gap:8px; font-size:14px; color:var(--text2); margin-bottom:18px; }
+  .pdp-price { display:flex; align-items:center; gap:14px; margin-bottom:22px; }
+  .pdp-price .price-current { font-size:30px; }
+  .pdp-desc { color:var(--text2); line-height:1.7; margin-bottom:26px; }
+  .qty-row { display:flex; align-items:center; gap:14px; margin-bottom:24px; }
+  .qty-box { display:flex; align-items:center; border:2px solid var(--gray2); border-radius:8px; }
+  .qty-box button { background:none; border:none; width:38px; height:38px; font-size:18px; cursor:pointer; font-weight:700; }
+  .qty-box span { min-width:32px; text-align:center; font-weight:700; }
+  .pdp-actions { display:flex; gap:14px; }
+  .btn-add-cart-lg { background:var(--primary); color:#fff; border:none; border-radius:10px; padding:16px 32px; font-size:15px; font-weight:800; cursor:pointer; flex:1; }
+  .btn-add-cart-lg:hover { background:var(--primary-dark); }
+  .related-title { font-family:'Sora',sans-serif; font-size:22px; font-weight:800; margin:50px 0 20px; }
+
+  /* REVIEWS SECTION */
+  .reviews-section { margin-top:50px; padding-top:36px; border-top:1px solid var(--gray2); }
+  .reviews-title { font-family:'Sora',sans-serif; font-size:22px; font-weight:800; margin-bottom:22px; }
+  .reviews-layout { display:grid; grid-template-columns:280px 1fr; gap:44px; align-items:start; }
+  .review-summary-box { background:var(--gray); border-radius:8px; padding:24px; }
+  .review-avg { font-family:'Sora',sans-serif; font-size:44px; font-weight:800; line-height:1; }
+  .review-avg-stars { margin:8px 0 4px; }
+  .review-avg-count { font-size:13px; color:var(--text2); margin-bottom:18px; }
+  .rating-bar-row { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text2); margin-bottom:7px; }
+  .rating-bar-row .lbl { width:34px; flex-shrink:0; }
+  .rating-bar-track { flex:1; height:7px; border-radius:4px; background:var(--gray2); overflow:hidden; }
+  .rating-bar-fill { height:100%; background:var(--gold); }
+  .rating-bar-row .pct { width:32px; text-align:right; flex-shrink:0; }
+  .review-list { display:flex; flex-direction:column; gap:22px; }
+  .review-card { border-bottom:1px solid var(--gray2); padding-bottom:20px; }
+  .review-card:last-child { border-bottom:none; }
+  .review-head { display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+  .review-avatar { width:38px; height:38px; border-radius:50%; background:var(--primary); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; flex-shrink:0; }
+  .review-meta-name { font-size:13.5px; font-weight:700; display:flex; align-items:center; gap:8px; }
+  .verified-badge { font-size:10.5px; font-weight:700; color:var(--success); background:#e7f5e8; padding:2px 7px; border-radius:3px; letter-spacing:.3px; }
+  .review-meta-date { font-size:12px; color:var(--text2); }
+  .review-stars-row { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+  .review-title-text { font-weight:700; font-size:14px; margin-bottom:6px; }
+  .review-body-text { font-size:13.5px; color:var(--text2); line-height:1.7; margin-bottom:10px; }
+  .review-helpful { display:flex; align-items:center; gap:10px; font-size:12.5px; color:var(--text2); }
+  .helpful-btn { background:none; border:1.5px solid var(--gray2); border-radius:20px; padding:5px 14px; cursor:pointer; font-size:12px; font-weight:600; color:var(--text); }
+  .helpful-btn:hover { border-color:var(--text); }
+  .helpful-btn.voted { background:var(--text); color:#fff; border-color:var(--text); }
+  @media (max-width:800px) { .reviews-layout { grid-template-columns:1fr; } }
+
+  /* MINI CART SUMMARY ROWS (drawer) */
+  .drawer-summary-row { display:flex; justify-content:space-between; font-size:13px; color:var(--text2); margin-bottom:9px; }
+  .drawer-summary-row.total { font-size:16px; font-weight:800; color:var(--text); border-top:1px solid var(--gray2); padding-top:12px; margin-top:2px; }
+  .cart-drawer-btns { display:flex; gap:10px; margin-top:14px; }
+  .btn-view-cart { flex:1; background:#fff; color:var(--text); border:1.5px solid var(--text); border-radius:var(--radius); padding:13px; font-size:12.5px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; cursor:pointer; }
+  .btn-view-cart:hover { background:var(--gray); }
+
+  /* CART PAGE / DRAWER */
+  .cart-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:200; }
+  .cart-overlay.open { display:block; }
+  .cart-drawer { position:fixed; right:-420px; top:0; bottom:0; width:420px; max-width:95vw; background:#fff; z-index:201; display:flex; flex-direction:column; box-shadow:-8px 0 40px rgba(0,0,0,0.18); transition:right .3s; }
+  .cart-drawer.open { right:0; }
+  .cart-header { padding:22px 24px; border-bottom:1px solid var(--gray2); display:flex; align-items:center; justify-content:space-between; }
+  .cart-header h2 { font-family:'Sora',sans-serif; font-size:16px; font-weight:800; letter-spacing:.5px; text-transform:uppercase; }
+  .close-btn { background:none; border:none; border-radius:50%; width:32px; height:32px; font-size:18px; cursor:pointer; color:var(--text2); }
+  .cart-items { flex:1; overflow-y:auto; padding:12px 24px; }
+  .cart-empty { text-align:center; padding:60px 0; color:var(--text2); }
+  .cart-item { display:flex; gap:14px; padding:14px 0; border-bottom:1px solid var(--gray2); }
+  .cart-item-img { width:64px; height:76px; border-radius:2px; object-fit:cover; background:var(--gray); flex-shrink:0; }
+  .cart-item-info { flex:1; }
+  .cart-item-name { font-size:13.5px; font-weight:600; margin-bottom:4px; cursor:pointer; }
+  .cart-item-price { font-size:14px; font-weight:800; color:var(--text); }
+  .cart-item-qty { display:flex; align-items:center; gap:10px; margin-top:8px; }
+  .qty-btn { width:24px; height:24px; border-radius:4px; background:var(--gray); border:none; cursor:pointer; font-size:14px; font-weight:700; }
+  .qty-num { font-size:13px; font-weight:700; min-width:18px; text-align:center; }
+  .remove-btn { background:none; border:none; color:var(--danger); cursor:pointer; font-size:12px; margin-left:8px; }
+  .cart-footer { padding:20px 24px 24px; border-top:1px solid var(--gray2); }
+  .cart-total { display:flex; justify-content:space-between; font-size:16px; font-weight:800; margin-bottom:14px; }
+  .btn-checkout { width:100%; background:var(--primary); color:#fff; border:none; border-radius:var(--radius); padding:14px; font-size:12.5px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; cursor:pointer; }
+  .btn-checkout:hover { background:var(--primary-dark); }
+
+  .cart-page-grid { display:grid; grid-template-columns:2fr 1fr; gap:32px; align-items:start; }
+  .cart-page-list { background:#fff; border-radius:var(--radius); padding:8px 24px; border:1px solid var(--gray2); }
+  .summary-box { background:#fff; border-radius:var(--radius); padding:24px; border:1px solid var(--gray2); }
+  .summary-row { display:flex; justify-content:space-between; font-size:14px; color:var(--text2); margin-bottom:12px; }
+  .summary-row.total { font-size:18px; font-weight:800; color:var(--text); border-top:1px solid var(--gray2); padding-top:14px; margin-top:6px; }
+
+  /* CHECKOUT */
+  .checkout-grid { display:grid; grid-template-columns:1.4fr 1fr; gap:32px; align-items:start; }
+  .checkout-form { background:#fff; border-radius:var(--radius); padding:28px; border:1px solid var(--gray2); }
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .form-group { margin-bottom:16px; }
+  .form-group label { display:block; font-size:13px; font-weight:600; margin-bottom:6px; }
+  .form-group input, .form-group textarea, .form-group select {
+    width:100%; padding:11px 14px; border:1.5px solid var(--gray2); border-radius:var(--radius); font-size:14px; outline:none; font-family:inherit;
+  }
+  .form-group input:focus, .form-group textarea:focus { border-color:var(--text); }
+  .btn-submit-form { width:100%; background:var(--primary); color:#fff; border:none; border-radius:var(--radius); padding:15px; font-size:13px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; cursor:pointer; margin-top:6px; }
+  .btn-submit-form:hover { background:var(--primary-dark); }
+
+  /* THANK YOU */
+  .thankyou-box { max-width:560px; margin:60px auto; background:#fff; border-radius:var(--radius); border:1px solid var(--gray2); padding:48px; text-align:center; }
+  .thankyou-icon { width:72px; height:72px; border-radius:50%; background:var(--success); color:#fff; font-size:36px; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; }
+  .thankyou-box h2 { font-family:'Sora',sans-serif; font-size:26px; margin-bottom:10px; }
+  .order-id { background:var(--gray); border-radius:var(--radius); padding:14px; font-weight:700; margin:20px 0; }
+
+  /* FOOTER */
+  footer { background:var(--dark); color:#9ca3af; padding:56px 24px 28px; margin-top:56px; }
+  .footer-inner { max-width:1140px; margin:0 auto; display:grid; grid-template-columns:2fr 1fr 1fr 1.4fr; gap:44px; }
+  .footer-brand p { font-size:13px; line-height:1.7; margin:16px 0 20px; max-width:240px; }
+  .footer-col h4 { color:#fff; font-weight:700; font-size:13px; letter-spacing:1px; text-transform:uppercase; margin-bottom:16px; }
+  .footer-col ul { list-style:none; }
+  .footer-col ul li { margin-bottom:10px; }
+  .footer-col ul li a { color:#9ca3af; text-decoration:none; font-size:13px; }
+  .footer-col ul li a:hover { color:var(--accent); }
+  .newsletter-form { display:flex; border-radius:var(--radius); overflow:hidden; border:1px solid rgba(255,255,255,0.12); margin-top:12px; }
+  .newsletter-form input { flex:1; background:transparent; border:none; outline:none; padding:10px 14px; font-size:13px; color:#fff; }
+  .newsletter-form button { background:var(--accent); border:none; padding:10px 18px; color:#fff; font-weight:700; font-size:13px; cursor:pointer; }
+  .footer-bottom { max-width:1140px; margin:36px auto 0; padding-top:22px; border-top:1px solid rgba(255,255,255,0.08); display:flex; justify-content:space-between; font-size:13px; flex-wrap:wrap; gap:12px; }
+
+  .toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--dark); color:#fff; border-radius:var(--radius); padding:12px 28px; font-size:14px; font-weight:600; z-index:300; transition:transform .3s; box-shadow:0 8px 24px rgba(0,0,0,0.3); white-space:nowrap; }
+  .toast.show { transform:translateX(-50%) translateY(0); }
+
+  .modal-overlay { position:fixed; inset:0; background:rgba(14,17,22,0.6); z-index:500; display:none; align-items:center; justify-content:center; padding:20px; }
+  .modal-overlay.open { display:flex; }
+  .modal-box { background:#fff; border-radius:var(--radius); box-shadow:var(--shadow); padding:32px; width:100%; max-width:420px; max-height:90vh; overflow-y:auto; position:relative; }
+  .modal-box h2 { font-family:'Sora',sans-serif; font-size:22px; margin-bottom:20px; }
+  .modal-close { position:absolute; top:20px; right:20px; background:none; border:none; font-size:20px; cursor:pointer; color:var(--text2); }
+
+  .page-section { display:none; }
+  .page-section.active { display:block; }
+
+  @media (max-width:900px) {
+    .pdp { grid-template-columns:1fr; }
+    .cart-page-grid, .checkout-grid { grid-template-columns:1fr; }
+    .form-row { grid-template-columns:1fr; }
+  }
+  @media (max-width:768px) {
+    .footer-inner { grid-template-columns:1fr 1fr; }
+    .hero h1 { font-size:30px; }
+    .header-main { padding:12px 16px; }
+    .main { padding:22px 16px; }
+  }
+  @media (max-width:480px) {
+    .footer-inner { grid-template-columns:1fr; }
+    .product-grid { grid-template-columns:repeat(2,1fr); gap:12px; }
+  }
+  @media (max-width:700px) { .hide-sm { display:none; } }
+</style>
+</head>
+<body>
+
+
+<!-- (contact form now lives at /support as a real page, see page-support below) -->
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-left"><span>📞 +91 98765 43210</span><span class="hide-sm">✉️ support@zibrora.com</span></div>
+    <div class="topbar-center hide-sm">Free Shipping on Orders Above ₹999</div>
+    <div class="topbar-right">
+      <a onclick="navigate('/cart')">Track Order</a>
+      <a onclick="navigate('/support')">Returns &amp; Exchanges</a>
+      <a onclick="navigate('/support')">Help Center</a>
+    </div>
+  </div>
+</div>
+
+<header>
+  <div class="header-main">
+    <a class="logo" onclick="navigate('/')">
+      <div class="logo-text"><div class="name">ZIBRORA<span style="color:var(--gold)">.</span></div><div style="font-size:10px;color:#fff;font-style:italic;font-weight:600;letter-spacing:.3px;background:var(--dark2);display:inline-block;padding:0 5px;border-radius:2px;margin-top:2px">Explore Plus</div></div>
+    </a>
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search products, brands and more..." onkeydown="if(event.key==='Enter')runSearch()">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" onclick="runSearch()"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    </div>
+    <div class="header-actions">      <button class="btn-form-open" onclick="toggleWishlistPanel()"><span class="icon-glyph">♡</span>Wishlist</button>
+      <button class="btn-cart" onclick="toggleCart()"><span class="icon-glyph">🛍</span>Cart<span class="cart-badge" id="cartBadge" style="display:none">0</span></button>
+    </div>
+  </div>
+  <nav>
+    <div class="nav-inner-wrap">
+      <span class="nav-hamburger">☰ Shop by Category</span>
+      <div class="nav-inner" id="navInner"></div>
+    </div>
+  </nav>
+  <div class="breadcrumb" id="breadcrumb"></div>
+</header>
+
+<!-- MOVING PROMO BANNER -->
+<div class="marquee-bar">
+  <div class="marquee-track">
+    <span>🎉 BIG SAVINGS DAYS — Up to 70% OFF Electronics</span>
+    <span>🚚 FREE Delivery on Orders Above ₹999</span>
+    <span>💳 10% Instant Discount on Bank Cards</span>
+    <span>🔄 7-Day Easy Returns on All Products</span>
+    <span>⭐ New Arrivals Added Daily — Shop Now</span>
+    <span>🎉 BIG SAVINGS DAYS — Up to 70% OFF Electronics</span>
+    <span>🚚 FREE Delivery on Orders Above ₹999</span>
+    <span>💳 10% Instant Discount on Bank Cards</span>
+    <span>🔄 7-Day Easy Returns on All Products</span>
+    <span>⭐ New Arrivals Added Daily — Shop Now</span>
+  </div>
+</div>
+
+<!-- HOME PAGE -->
+<section class="page-section" id="page-home">
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-content">
+        <div class="hero-badge">New Arrivals</div>
+        <h1>Elevate Your Everyday <span>Style</span></h1>
+        <p>Discover the latest trends in fashion, curated for people who want more from every wardrobe.</p>
+        <div class="hero-btns">
+          <button class="btn-primary" onclick="navigate('/category/all')">Shop Now</button>
+        </div>
+      </div>
+      <div class="hero-img-wrap">
+        <img id="heroImg" alt="New arrivals">
+        <button class="hero-arrow prev" onclick="heroSlide(-1)">‹</button>
+        <button class="hero-arrow next" onclick="heroSlide(1)">›</button>
+        <div class="hero-dots" id="heroDots"></div>
+      </div>
+    </div>
+  </section>
+  <div class="cat-strip" id="catStrip"></div>
+  <main class="main">
+    <div class="section-header"><h2>Trending Now</h2><a class="view-all" onclick="navigate('/category/all')">View All →</a></div>
+    <p class="section-sub">Our most loved picks this week</p>
+    <div class="product-grid" id="homeGrid"></div>
+  </main>
+</section>
+
+<!-- CATEGORY / SEARCH PAGE -->
+<section class="page-section" id="page-category">
+  <main class="main">
+    <div class="section-header"><h2 id="sectionTitle">All Products</h2></div>
+    <p class="section-sub" id="sectionSub">Discover our curated selection of premium products</p>
+    <div class="filters-row">
+      <div class="results-count" id="resultsCount"></div>
+      <select class="sort-select" onchange="sortProducts(this.value)">
+        <option value="featured">Featured</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="rating">Best Rating</option>
+        <option value="newest">Newest First</option>
+      </select>
+    </div>
+    <div class="product-grid" id="productGrid"></div>
+  </main>
+</section>
+
+<!-- PRODUCT DETAIL PAGE -->
+<section class="page-section" id="page-product">
+  <main class="main">
+    <div class="pdp" id="pdpContent"></div>
+    <div class="reviews-section" id="reviewsSection"></div>
+    <h3 class="related-title">You may also like</h3>
+    <div class="product-grid" id="relatedGrid"></div>
+  </main>
+</section>
+
+<!-- CART PAGE -->
+<section class="page-section" id="page-cart">
+  <main class="main">
+    <div class="section-header"><h2>Your Cart</h2></div>
+    <p class="section-sub">Review your items before checkout</p>
+    <div class="cart-page-grid">
+      <div class="cart-page-list" id="cartPageList"></div>
+      <div class="summary-box">
+        <div class="summary-row"><span>Subtotal</span><span id="sumSubtotal">₹0</span></div>
+        <div class="summary-row"><span>Shipping</span><span id="sumShipping">₹0</span></div>
+        <div class="summary-row total"><span>Total</span><span id="sumTotal">₹0</span></div>
+        <button class="btn-checkout" style="margin-top:16px" onclick="navigate('/checkout')">Proceed to Checkout →</button>
+      </div>
+    </div>
+    <div class="reco-section">
+      <div class="section-header"><h2>You May Also Like</h2></div>
+      <p class="section-sub">Based on items in your cart</p>
+      <div class="product-grid reco-grid" id="cartRecoGrid"></div>
+    </div>
+  </main>
+</section>
+
+<!-- CHECKOUT PAGE -->
+<section class="page-section" id="page-checkout">
+  <main class="main">
+    <div class="section-header"><h2>Checkout</h2></div>
+    <p class="section-sub">Enter your shipping and payment details</p>
+    <div class="checkout-grid">
+      <div class="checkout-form">
+        <div class="form-row">
+          <div class="form-group"><label>Full Name</label><input type="text" id="coName" placeholder="Jane Doe"></div>
+          <div class="form-group"><label>Phone</label><input type="tel" id="coPhone" placeholder="98765 43210"></div>
+        </div>
+        <div class="form-group"><label>Address</label><textarea id="coAddress" rows="2" placeholder="Street, area"></textarea></div>
+        <div class="form-row">
+          <div class="form-group"><label>City</label><input type="text" id="coCity" placeholder="Chennai"></div>
+          <div class="form-group"><label>Pincode</label><input type="text" id="coPincode" placeholder="600001"></div>
+        </div>
+        <div class="form-group">
+          <label>Payment Method</label>
+          <select id="coPayment"><option value="card">Credit / Debit Card</option><option value="upi">UPI</option><option value="cod">Cash on Delivery</option></select>
+        </div>
+        <button class="btn-submit-form" onclick="placeOrder()">Place Order →</button>
+      </div>
+      <div class="summary-box">
+        <div id="checkoutSummary"></div>
+        <div class="summary-row total"><span>Total</span><span id="checkoutTotal">₹0</span></div>
+      </div>
+    </div>
+    <div class="reco-section">
+      <div class="section-header"><h2>You May Also Like</h2></div>
+      <p class="section-sub">Frequently bought with items in your order</p>
+      <div class="product-grid reco-grid" id="checkoutRecoGrid"></div>
+    </div>
+  </main>
+</section>
+
+<!-- SUPPORT / CONTACT PAGE -->
+<section class="page-section" id="page-support">
+  <main class="main">
+    <div class="section-header"><h2>Contact Us</h2></div>
+    <p class="section-sub">Questions about an order, a product, or returns? Send us a message.</p>
+    <div class="checkout-grid">
+      <div class="checkout-form">
+        <div class="form-group"><label>Name</label><input type="text" id="fName" placeholder="Enter your full name"></div>
+        <div class="form-group"><label>Phone Number</label><input type="tel" id="fPhone" placeholder="Enter phone number"></div>
+        <div class="form-group"><label>Age</label><input type="number" id="fAge" placeholder="Enter your age" min="1"></div>
+        <div class="form-group"><label>Address</label><textarea id="fAddress" rows="2" placeholder="Enter your address"></textarea></div>
+        <div class="form-group"><label>City</label><input type="text" id="fCity" placeholder="Enter your city"></div>
+        <button class="btn-submit-form" onclick="submitDetailsForm()">Submit</button>
+      </div>
+      <div class="summary-box">
+        <div style="font-weight:700;margin-bottom:10px">Need a faster answer?</div>
+        <p style="color:var(--text2);font-size:14px;line-height:1.7">Call us at 1800-123-4567 (Mon–Sat, 9am–7pm) or email support@zibrora.com.</p>
+      </div>
+    </div>
+  </main>
+</section>
+
+<!-- THANK YOU PAGE -->
+<section class="page-section" id="page-thankyou">
+  <main class="main">
+    <div class="thankyou-box">
+      <div class="thankyou-icon">✓</div>
+      <h2>Order Confirmed!</h2>
+      <p style="color:var(--text2)">Thank you for shopping with ZIBRORA. A confirmation has been sent to your email.</p>
+      <div class="order-id" id="orderIdDisplay"></div>
+      <button class="btn-primary" onclick="navigate('/')">Continue Shopping</button>
+    </div>
+  </main>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo"><div class="logo-text"><div class="name" style="color:#fff">ZIBRORA</div></div></div>
+      <p>Your one-stop destination for premium products at unbeatable prices. Shop smarter, live bolder.</p>
+    </div>
+    <div class="footer-col"><h4>Shop</h4><ul>
+      <li><a onclick="navigate('/category/electronics')">Electronics</a></li>
+      <li><a onclick="navigate('/category/clothing')">Clothing</a></li>
+      <li><a onclick="navigate('/category/home')">Home</a></li>
+      <li><a onclick="navigate('/category/beauty')">Beauty</a></li>
+      <li><a onclick="navigate('/category/footwear')">Footwear</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Support</h4><ul>
+      <li><a onclick="navigate('/support')">Contact Us</a></li>
+      <li><a onclick="navigate('/support')">Track Order</a></li>
+      <li><a onclick="navigate('/support')">Returns</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Newsletter</h4>
+      <p style="font-size:13px;line-height:1.6">Get exclusive deals and early access to new arrivals.</p>
+      <div class="newsletter-form"><input type="email" placeholder="Your email"><button onclick="showToast('Subscribed! Welcome to ZIBRORA.')">Join</button></div>
+    </div>
+  </div>
+  <div class="footer-bottom"><span>© 2026 ZIBRORA. All rights reserved.</span><span>Privacy Policy · Terms of Service</span></div>
+</footer>
+
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header"><h2 id="cartDrawerTitle">My Cart (0)</h2><button class="close-btn" onclick="toggleCart()">✕</button></div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="drawer-summary-row"><span>Subtotal</span><span id="cartTotal">₹0</span></div>
+    <div class="drawer-summary-row"><span>Shipping</span><span>FREE</span></div>
+    <div class="drawer-summary-row total"><span>Total</span><span id="cartTotal2">₹0</span></div>
+    <div class="cart-drawer-btns">
+      <button class="btn-view-cart" onclick="goToCartPage()">View Cart</button>
+      <button class="btn-checkout" onclick="toggleCart();navigate('/checkout')">Checkout</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   PRODUCT DATA
+   ========================================================= */
+const CATEGORIES = ['All','Furniture','Mobile','Electronics','Accessories','Beauty','Clothing','Footwear','Home','Sports'];
+const PRODUCTS = [
+  { id:2, name:'AirBook Pro 14', category:'Electronics', price:91219, oldPrice:107819, rating:4.9, reviews:5063, badge:'Sale', discount:15, img:'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&q=80', desc:'Ultra-light laptop with all-day battery and a stunning retina display.' },
+  { id:3, name:'Velocity Air Runners', category:'Footwear', price:10789, oldPrice:13279, rating:4.6, reviews:1860, badge:'Sale', discount:19, img:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80', desc:'Breathable mesh runners engineered for all-day comfort.' },
+  { id:4, name:'Heritage Leather Wallet', category:'Accessories', price:4979, oldPrice:null, rating:4.5, reviews:884, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80', desc:'Full-grain leather wallet with RFID-blocking card slots.' },
+  { id:5, name:'Vantage 4K Smart TV 55"', category:'Electronics', price:49799, oldPrice:66399, rating:4.7, reviews:1300, badge:'Sale', discount:25, img:'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=700&q=85&auto=format&fit=crop', desc:'Crystal-clear 4K HDR display with built-in smart streaming.' },
+  { id:6, name:'Lumix Mirrorless Camera', category:'Electronics', price:74699, oldPrice:null, rating:4.7, reviews:762, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=600&q=80', desc:'Compact mirrorless body with 4K video and fast autofocus.' },
+  { id:7, name:'Classic Straight Jeans', category:'Clothing', price:6639, oldPrice:null, rating:4.4, reviews:4293, badge:null, discount:null, img:'https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&q=80', desc:'Timeless straight-fit denim in a durable mid-wash.' },
+  { id:8, name:'TrailFlask Steel Bottle', category:'Sports', price:2899, oldPrice:3729, rating:4.4, reviews:2368, badge:'Sale', discount:22, img:'https://images.unsplash.com/photo-1523362628745-0c100150b504?w=600&q=80', desc:'Double-wall insulated bottle keeps drinks cold for 24 hours.' },
+  { id:9, name:'Nimbus Mechanical Keyboard', category:'Electronics', price:10789, oldPrice:12449, rating:4.5, reviews:1456, badge:'Sale', discount:13, img:'https://images.unsplash.com/photo-1601445638532-3ef30f563e21?w=600&q=80', desc:'Hot-swappable mechanical switches with per-key RGB.' },
+  { id:10, name:'PureGlow Moisturizer', category:'Beauty', price:3729, oldPrice:null, rating:4.3, reviews:1520, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=600&q=80', desc:'Lightweight daily moisturizer with hyaluronic acid.' },
+  { id:11, name:'ZenFlex Yoga Mat', category:'Sports', price:4149, oldPrice:5389, rating:4.5, reviews:765, badge:'Sale', discount:23, img:'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&q=80', desc:'Extra-thick non-slip mat for yoga and floor workouts.' },
+  { id:12, name:'Artisan Coffee Mug Set', category:'Home', price:3319, oldPrice:null, rating:4.7, reviews:347, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=600&q=80', desc:'Set of 4 stoneware mugs, dishwasher and microwave safe.' },
+  { id:13, name:'Momentum Running Shoes', category:'Footwear', price:7469, oldPrice:9959, rating:4.6, reviews:2100, badge:'Sale', discount:25, img:'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&q=80', desc:'Responsive cushioning built for long-distance runs.' },
+  { id:14, name:'Silhouette Silk Blouse', category:'Clothing', price:5809, oldPrice:null, rating:4.3, reviews:540, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1620799139507-2a76f79a2f4d?w=600&q=80', desc:'Effortless silk blouse for work or evening wear.' },
+  { id:15, name:'Pulse Wireless Earbuds', category:'Electronics', price:6639, oldPrice:8299, rating:4.5, reviews:3200, badge:'Sale', discount:20, img:'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=600&q=80', desc:'True wireless earbuds with adaptive noise cancellation.' },
+  { id:16, name:'Horizon Bamboo Sunglasses', category:'Accessories', price:2489, oldPrice:null, rating:4.2, reviews:430, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&q=80', desc:'Polarized lenses in a sustainable bamboo frame.' },
+  { id:17, name:'Chrono Smart Watch', category:'Electronics', price:16599, oldPrice:20749, rating:4.6, reviews:980, badge:'Sale', discount:20, img:'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80', desc:'Heart-rate, sleep, and workout tracking with 7-day battery.' },
+  { id:18, name:'Frontier Denim Jacket', category:'Clothing', price:8299, oldPrice:null, rating:4.4, reviews:610, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1551537482-f2075a1d41f2?w=600&q=80', desc:'Classic trucker jacket in rugged washed denim.' },
+  { id:19, name:'Glow Desk Lamp', category:'Home', price:2899, oldPrice:null, rating:4.5, reviews:290, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=600&q=80', desc:'Adjustable LED desk lamp with 3 brightness modes.' },
+  { id:20, name:'ProShake Bottle Shaker', category:'Sports', price:1239, oldPrice:1659, rating:4.3, reviews:512, badge:'Sale', discount:25, img:'https://images.unsplash.com/photo-1600718374662-0483d2b9da44?w=600&q=80', desc:'Leak-proof shaker with a mixing mesh for smooth blends.' },
+  { id:21, name:'Radiance Vitamin C Serum', category:'Beauty', price:2739, oldPrice:null, rating:4.6, reviews:1120, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=700&q=85&auto=format&fit=crop', desc:'Brightening serum with 15% vitamin C and vitamin E.' },
+  { id:22, name:'Velvet Matte Lipstick Set', category:'Beauty', price:2069, oldPrice:2489, rating:4.4, reviews:860, badge:'Sale', discount:16, img:'https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=700&q=85&auto=format&fit=crop', desc:'Set of 4 long-wear matte shades in everyday tones.' },
+  { id:23, name:'Silk Hair Repair Oil', category:'Beauty', price:1659, oldPrice:null, rating:4.5, reviews:640, badge:null, discount:null, img:'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=700&q=85&auto=format&fit=crop', desc:'Lightweight oil that tames frizz without weighing hair down.' },
+  { id:24, name:'Charcoal Detox Face Mask', category:'Beauty', price:1489, oldPrice:1909, rating:4.2, reviews:390, badge:'Sale', discount:22, img:'https://images.unsplash.com/photo-1556229010-6c3f2c9ca5f8?w=700&q=85&auto=format&fit=crop', desc:'Deep-cleansing clay mask for pores and excess oil.' },
+  { id:25, name:'Everyday Crewneck Sweater', category:'Clothing', price:4559, oldPrice:null, rating:4.5, reviews:720, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=700&q=85&auto=format&fit=crop', desc:'Soft cotton-blend sweater for cool-weather layering.' },
+  { id:26, name:'Aria Wrap Midi Dress', category:'Clothing', price:5389, oldPrice:7049, rating:4.6, reviews:980, badge:'Sale', discount:24, img:'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=700&q=85&auto=format&fit=crop', desc:'Flattering wrap silhouette in a breathable weave.' },
+  { id:27, name:'Everyday Chino Trousers', category:'Clothing', price:4149, oldPrice:null, rating:4.3, reviews:530, badge:null, discount:null, img:'https://images.unsplash.com/photo-1548883354-7622d03aca27?w=700&q=85&auto=format&fit=crop', desc:'Tailored fit chinos that move from desk to dinner.' },
+  { id:28, name:'Coast Linen Shirt', category:'Clothing', price:3729, oldPrice:4979, rating:4.4, reviews:410, badge:'Sale', discount:25, img:'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=700&q=85&auto=format&fit=crop', desc:'Breathable linen shirt for warm-weather days.' },
+  { id:29, name:'Titan Gaming Monitor 27"', category:'Electronics', price:24899, oldPrice:31539, rating:4.7, reviews:1240, badge:'Sale', discount:21, img:'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=700&q=85&auto=format&fit=crop', desc:'165Hz QHD panel with 1ms response for competitive play.' },
+  { id:30, name:'Orbit Portable Speaker', category:'Electronics', price:5809, oldPrice:null, rating:4.5, reviews:1780, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=700&q=85&auto=format&fit=crop', desc:'Waterproof speaker with 20-hour battery and deep bass.' },
+  { id:31, name:'Flux Fast Wireless Charger', category:'Electronics', price:2489, oldPrice:3319, rating:4.3, reviews:960, badge:'Sale', discount:25, img:'https://images.unsplash.com/photo-1591290619762-c8f5341f24b8?w=700&q=85&auto=format&fit=crop', desc:'15W wireless charging pad compatible with most phones.' },
+  { id:32, name:'Compass Action Camera 4K', category:'Electronics', price:15769, oldPrice:null, rating:4.6, reviews:540, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=700&q=85&auto=format&fit=crop', desc:'Waterproof 4K action cam with image stabilization.' },
+  { id:33, name:'Drift Canvas Sneakers', category:'Footwear', price:4979, oldPrice:null, rating:4.4, reviews:1030, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=700&q=85&auto=format&fit=crop', desc:'Everyday low-top sneakers in durable canvas.' },
+  { id:34, name:'Summit Hiking Boots', category:'Footwear', price:11619, oldPrice:14519, rating:4.7, reviews:870, badge:'Sale', discount:20, img:'https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=700&q=85&auto=format&fit=crop', desc:'Waterproof boots with reinforced ankle support.' },
+  { id:35, name:'Glide Slip-On Loafers', category:'Footwear', price:6219, oldPrice:null, rating:4.3, reviews:410, badge:null, discount:null, img:'https://images.unsplash.com/photo-1533867617858-e7b97e060509?w=700&q=85&auto=format&fit=crop', desc:'Cushioned slip-ons for all-day comfort at the office.' },
+  { id:36, name:'Haven Ceramic Dinner Set', category:'Home', price:6639, oldPrice:8299, rating:4.6, reviews:520, badge:'Sale', discount:20, img:'https://images.unsplash.com/photo-1603199506016-b9a594b593c0?w=700&q=85&auto=format&fit=crop', desc:'16-piece stoneware dinner set for everyday use.' },
+  { id:37, name:'Cloudrest Memory Foam Pillow', category:'Home', price:2899, oldPrice:null, rating:4.5, reviews:1340, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=700&q=85&auto=format&fit=crop', desc:'Contoured memory foam pillow for neck support.' },
+  { id:38, name:'Ember Scented Candle Trio', category:'Home', price:2319, oldPrice:2899, rating:4.4, reviews:610, badge:'Sale', discount:20, img:'https://images.unsplash.com/photo-1603006905003-be475563bc59?w=700&q=85&auto=format&fit=crop', desc:'Set of 3 soy candles in warm autumn scents.' },
+  { id:39, name:'Meridian Storage Ottoman', category:'Home', price:5389, oldPrice:null, rating:4.3, reviews:270, badge:null, discount:null, img:'https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=700&q=85&auto=format&fit=crop', desc:'Compact storage ottoman that doubles as extra seating.' },
+  { id:40, name:'Ridge Adjustable Dumbbell Set', category:'Sports', price:12449, oldPrice:15769, rating:4.7, reviews:920, badge:'Sale', discount:21, img:'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=700&q=85&auto=format&fit=crop', desc:'Space-saving dumbbells adjustable from 5–25 lbs.' },
+  { id:41, name:'Pulse Fitness Resistance Bands', category:'Sports', price:1659, oldPrice:null, rating:4.4, reviews:1450, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1598971639058-2c8c3a9c4f6d?w=700&q=85&auto=format&fit=crop', desc:'Set of 5 resistance levels for strength and mobility.' },
+  { id:42, name:'Trailhead Foldable Camp Chair', category:'Sports', price:3729, oldPrice:4559, rating:4.5, reviews:380, badge:'Sale', discount:18, img:'https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?w=700&q=85&auto=format&fit=crop', desc:'Lightweight folding chair with a built-in cup holder.' },
+  { id:43, name:'Aster Woven Tote Bag', category:'Accessories', price:3319, oldPrice:null, rating:4.5, reviews:690, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1594223274512-ad4803739b7c?w=700&q=85&auto=format&fit=crop', desc:'Everyday tote woven from durable recycled fibers.' },
+  { id:44, name:'Nova Minimalist Watch', category:'Accessories', price:7469, oldPrice:9959, rating:4.6, reviews:1030, badge:'Sale', discount:25, img:'https://images.unsplash.com/photo-1508057198894-247b23fe5ade?w=700&q=85&auto=format&fit=crop', desc:'Slim analog watch with a genuine leather strap.' },
+  { id:45, name:'Cascade Silk Scarf', category:'Accessories', price:1909, oldPrice:null, rating:4.3, reviews:220, badge:null, discount:null, img:'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=700&q=85&auto=format&fit=crop', desc:'Lightweight printed scarf that pairs with any outfit.' },  { id:46, name:'Ergo Pro Mesh Office Chair', category:'Furniture', price:8499, oldPrice:11999, rating:4.6, reviews:1240, badge:'Sale', discount:29, img:'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=700&q=85&auto=format&fit=crop', desc:'Breathable mesh back with adjustable lumbar support and armrests.' },
+  { id:47, name:'Oakwood Executive Study Table', category:'Furniture', price:14999, oldPrice:18999, rating:4.5, reviews:610, badge:'Sale', discount:21, img:'https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=700&q=85&auto=format&fit=crop', desc:'Solid engineered wood desk with cable management and drawer storage.' },
+  { id:48, name:'Nova Dining Table Set (4-Seater)', category:'Furniture', price:22999, oldPrice:null, rating:4.7, reviews:340, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1617104678098-de229db51175?w=700&q=85&auto=format&fit=crop', desc:'Scratch-resistant dining set with 4 cushioned chairs.' },
+  { id:49, name:'Cushionlite 3-Seater Sofa', category:'Furniture', price:27999, oldPrice:34999, rating:4.4, reviews:520, badge:'Sale', discount:20, img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=700&q=85&auto=format&fit=crop', desc:'High-density foam sofa upholstered in stain-resistant fabric.' },
+  { id:50, name:'Foldable Study Chair', category:'Furniture', price:2999, oldPrice:3799, rating:4.2, reviews:890, badge:'Sale', discount:21, img:'https://images.unsplash.com/photo-1592078615290-033ee584e267?w=700&q=85&auto=format&fit=crop', desc:'Compact folding chair, easy to store, ideal for small rooms.' },
+  { id:51, name:'Bookworm 5-Tier Bookshelf', category:'Furniture', price:6499, oldPrice:null, rating:4.5, reviews:410, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1594620302200-9a762244a156?w=700&q=85&auto=format&fit=crop', desc:'Open-shelf unit for books, décor, and storage bins.' },
+  { id:52, name:'ZIBRORA Nova X5 Smartphone', category:'Mobile', price:18999, oldPrice:21999, rating:4.5, reviews:2830, badge:'Sale', discount:14, img:'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=700&q=85&auto=format&fit=crop', desc:'6.5" AMOLED display, 5000mAh battery, triple camera setup.' },
+  { id:53, name:'ZIBRORA Prime Z Smartphone', category:'Mobile', price:32999, oldPrice:37999, rating:4.7, reviews:1950, badge:'Sale', discount:13, img:'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=700&q=85&auto=format&fit=crop', desc:'Flagship chipset, 120Hz display, 65W fast charging.' },
+  { id:54, name:'ZIBRORA Lite A2 Smartphone', category:'Mobile', price:10999, oldPrice:null, rating:4.2, reviews:1120, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=700&q=85&auto=format&fit=crop', desc:'Budget-friendly performer with a 90Hz display and dual camera.' },
+  { id:55, name:'ZIBRORA Fold S Smartphone', category:'Mobile', price:89999, oldPrice:99999, rating:4.6, reviews:410, badge:'Sale', discount:10, img:'https://images.unsplash.com/photo-1597588553385-9f9f6b6e8d0d?w=700&q=85&auto=format&fit=crop', desc:'Foldable display flagship with multitasking split-screen mode.' },
+  { id:56, name:'Nebula 27" QHD Monitor', category:'Electronics', price:24999, oldPrice:31999, rating:4.6, reviews:324, badge:'Sale', discount:22, img:'https://images.unsplash.com/photo-1518770660439-4636190af475?w=700&q=85&auto=format&fit=crop', desc:'Curved QHD monitor with 165Hz refresh rate for gaming and work.' },
+  { id:57, name:'SoundCore Bluetooth Speaker', category:'Electronics', price:3799, oldPrice:4999, rating:4.7, reviews:2126, badge:'Sale', discount:24, img:'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=700&q=85&auto=format&fit=crop', desc:'Portable speaker with 20-hour battery and deep bass.' },
+  { id:58, name:'Quantum Gaming Mouse', category:'Electronics', price:2499, oldPrice:null, rating:4.2, reviews:959, badge:null, discount:null, img:'https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=700&q=85&auto=format&fit=crop', desc:'Lightweight gaming mouse with 16000 DPI optical sensor.' },
+  { id:59, name:'PowerCore 20000mAh Power Bank', category:'Electronics', price:1999, oldPrice:2599, rating:4.7, reviews:4587, badge:'Sale', discount:23, img:'https://images.unsplash.com/photo-1484788984921-03950022c9ef?w=700&q=85&auto=format&fit=crop', desc:'Fast-charging power bank with dual USB-C ports.' },
+  { id:60, name:'StreamCast 4K Webcam', category:'Electronics', price:4599, oldPrice:null, rating:4.1, reviews:3576, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1550009158-9ebf69173e03?w=700&q=85&auto=format&fit=crop', desc:'Autofocus webcam with built-in noise-cancelling mic.' },
+  { id:61, name:'AeroBook Slim 13"', category:'Electronics', price:68999, oldPrice:79999, rating:4.0, reviews:1911, badge:'Sale', discount:14, img:'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=700&q=85&auto=format&fit=crop', desc:'Thin and light laptop built for everyday productivity.' },
+  { id:62, name:'CineView Projector Mini', category:'Electronics', price:15999, oldPrice:19999, rating:4.2, reviews:337, badge:'Sale', discount:20, img:'https://images.unsplash.com/photo-1585790050230-5dd28404ccb9?w=700&q=85&auto=format&fit=crop', desc:'Portable 1080p projector for movie nights anywhere.' },
+  { id:63, name:'FlexHub 7-in-1 USB-C Dock', category:'Electronics', price:3299, oldPrice:null, rating:4.5, reviews:4584, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=700&q=85&auto=format&fit=crop', desc:'Expand your laptop with HDMI, USB, and card reader ports.' },
+  { id:64, name:'ZIBRORA Edge 5G Smartphone', category:'Mobile', price:24999, oldPrice:28999, rating:4.2, reviews:2398, badge:'Sale', discount:14, img:'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=700&q=85&auto=format&fit=crop', desc:'Snappy 5G performance with a 108MP main camera.' },
+  { id:65, name:'ZIBRORA Air C1 Smartphone', category:'Mobile', price:13999, oldPrice:null, rating:4.7, reviews:173, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=700&q=85&auto=format&fit=crop', desc:'Slim and light with a smooth 90Hz AMOLED display.' },
+  { id:66, name:'ZIBRORA Max Ultra Smartphone', category:'Mobile', price:54999, oldPrice:61999, rating:4.6, reviews:2907, badge:'Sale', discount:11, img:'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=700&q=85&auto=format&fit=crop', desc:'Flagship camera system with pro-grade night mode.' },
+  { id:67, name:'ZIBRORA Buds Pro Case', category:'Mobile', price:1499, oldPrice:null, rating:4.3, reviews:1883, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1580910051074-3eb694886505?w=700&q=85&auto=format&fit=crop', desc:'Protective silicone case for true wireless earbuds.' },
+  { id:68, name:'ZIBRORA Fast Charger 65W', category:'Mobile', price:1299, oldPrice:1699, rating:4.1, reviews:3232, badge:'Sale', discount:24, img:'https://images.unsplash.com/photo-1567581935884-3349723552ca?w=700&q=85&auto=format&fit=crop', desc:'GaN charger that fills your phone in under an hour.' },
+  { id:69, name:'Cascade Trail Hiking Boots', category:'Footwear', price:8299, oldPrice:10499, rating:4.1, reviews:2937, badge:'Sale', discount:21, img:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=700&q=85&auto=format&fit=crop', desc:'Waterproof boots with rugged grip for any terrain.' },
+  { id:70, name:'Urban Canvas Sneakers', category:'Footwear', price:3199, oldPrice:null, rating:4.5, reviews:475, badge:null, discount:null, img:'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=700&q=85&auto=format&fit=crop', desc:'Everyday canvas sneakers with a cushioned footbed.' },
+  { id:71, name:'Glide Slip-On Loafers', category:'Footwear', price:4599, oldPrice:5799, rating:4.4, reviews:1142, badge:'Sale', discount:21, img:'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=700&q=85&auto=format&fit=crop', desc:'Comfortable loafers that go from desk to dinner.' },
+  { id:72, name:'Summit Ankle Boots', category:'Footwear', price:6799, oldPrice:null, rating:4.9, reviews:3220, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=700&q=85&auto=format&fit=crop', desc:'Sturdy ankle boots built for cold-weather commutes.' },
+  { id:73, name:'FlexFoam Training Shoes', category:'Footwear', price:5299, oldPrice:6899, rating:4.5, reviews:3082, badge:'Sale', discount:23, img:'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=700&q=85&auto=format&fit=crop', desc:'Responsive foam midsole for gym and cross-training.' },
+  { id:74, name:'Voyager Canvas Backpack', category:'Accessories', price:3599, oldPrice:4599, rating:4.5, reviews:689, badge:'Sale', discount:22, img:'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=700&q=85&auto=format&fit=crop', desc:'Water-resistant backpack with a padded laptop sleeve.' },
+  { id:75, name:'Skyline Aviator Sunglasses', category:'Accessories', price:2199, oldPrice:null, rating:4.0, reviews:1986, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=700&q=85&auto=format&fit=crop', desc:'UV-protected aviators with a lightweight metal frame.' },
+  { id:76, name:'Meridian Leather Belt', category:'Accessories', price:1799, oldPrice:null, rating:4.9, reviews:2027, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=700&q=85&auto=format&fit=crop', desc:'Reversible leather belt with a brushed buckle.' },
+  { id:77, name:'Timeless Analog Watch', category:'Accessories', price:5999, oldPrice:7499, rating:4.3, reviews:3834, badge:'Sale', discount:20, img:'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=700&q=85&auto=format&fit=crop', desc:'Minimalist dial watch with a genuine leather strap.' },
+  { id:78, name:'EverCarry Duffel Bag', category:'Accessories', price:4299, oldPrice:null, rating:4.6, reviews:3108, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=700&q=85&auto=format&fit=crop', desc:'Spacious gym duffel with a separate shoe compartment.' },
+  { id:79, name:'Silksmooth Hair Serum', category:'Beauty', price:1899, oldPrice:null, rating:4.3, reviews:1836, badge:null, discount:null, img:'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=700&q=85&auto=format&fit=crop', desc:'Frizz-control serum that adds shine without weighing hair down.' },
+  { id:80, name:'MatteFinish Foundation', category:'Beauty', price:1299, oldPrice:1599, rating:4.2, reviews:704, badge:'Sale', discount:19, img:'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=700&q=85&auto=format&fit=crop', desc:'Long-wear foundation with buildable, natural coverage.' },
+  { id:81, name:'Renew Night Repair Cream', category:'Beauty', price:2999, oldPrice:3699, rating:4.5, reviews:1521, badge:'Sale', discount:19, img:'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=700&q=85&auto=format&fit=crop', desc:'Overnight cream with retinol and peptides.' },
+  { id:82, name:'CitrusBurst Body Wash', category:'Beauty', price:799, oldPrice:null, rating:4.5, reviews:2125, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=700&q=85&auto=format&fit=crop', desc:'Refreshing body wash with vitamin C and citrus extracts.' },
+  { id:83, name:'PureLash Volumizing Mascara', category:'Beauty', price:999, oldPrice:null, rating:4.4, reviews:2331, badge:null, discount:null, img:'https://images.unsplash.com/photo-1585232004423-9d34e5aa5325?w=700&q=85&auto=format&fit=crop', desc:'Smudge-proof mascara for bold, voluminous lashes.' },
+  { id:84, name:'Everyday Crew Neck Tee', category:'Clothing', price:999, oldPrice:1299, rating:4.6, reviews:1919, badge:'Sale', discount:23, img:'https://images.unsplash.com/photo-1542272604-787c3835535d?w=700&q=85&auto=format&fit=crop', desc:'Soft cotton tee that pairs with anything.' },
+  { id:85, name:'Tailored Formal Shirt', category:'Clothing', price:2199, oldPrice:null, rating:4.6, reviews:578, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1620799139507-2a76f79a2f4d?w=700&q=85&auto=format&fit=crop', desc:'Wrinkle-resistant shirt for office and events.' },
+  { id:86, name:'CozyKnit Wool Sweater', category:'Clothing', price:3499, oldPrice:4299, rating:4.7, reviews:2704, badge:'Sale', discount:19, img:'https://images.unsplash.com/photo-1551537482-f2075a1d41f2?w=700&q=85&auto=format&fit=crop', desc:'Warm knit sweater for chilly evenings.' },
+  { id:87, name:'Flex Stretch Chinos', category:'Clothing', price:2599, oldPrice:null, rating:4.4, reviews:662, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=700&q=85&auto=format&fit=crop', desc:'Comfortable stretch chinos with a tailored fit.' },
+  { id:88, name:'Rainshield Packable Jacket', category:'Clothing', price:3999, oldPrice:4999, rating:4.8, reviews:4766, badge:'Sale', discount:20, img:'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=700&q=85&auto=format&fit=crop', desc:'Lightweight jacket that packs into its own pocket.' },
+  { id:89, name:'Weekend Jogger Pants', category:'Clothing', price:1899, oldPrice:null, rating:4.8, reviews:2697, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=700&q=85&auto=format&fit=crop', desc:'Relaxed-fit joggers with a tapered ankle.' },
+  { id:90, name:'AromaMist Essential Oil Diffuser', category:'Home', price:2299, oldPrice:2899, rating:4.6, reviews:3361, badge:'Sale', discount:21, img:'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=700&q=85&auto=format&fit=crop', desc:'Ultrasonic diffuser with color-changing LED light.' },
+  { id:91, name:'CloudLayer Memory Foam Pillow', category:'Home', price:1599, oldPrice:null, rating:4.8, reviews:3878, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=700&q=85&auto=format&fit=crop', desc:'Contoured pillow that supports neck and shoulders.' },
+  { id:92, name:'LinenLuxe Bedsheet Set', category:'Home', price:2799, oldPrice:3499, rating:4.2, reviews:2140, badge:'Sale', discount:20, img:'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=700&q=85&auto=format&fit=crop', desc:'Breathable cotton-linen sheets in a queen size set.' },
+  { id:93, name:'BrewMaster Drip Coffee Maker', category:'Home', price:3299, oldPrice:null, rating:4.7, reviews:4535, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=700&q=85&auto=format&fit=crop', desc:'Programmable coffee maker with a keep-warm plate.' },
+  { id:94, name:'EverClean Robot Vacuum', category:'Home', price:13999, oldPrice:17999, rating:4.7, reviews:3629, badge:'Sale', discount:22, img:'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=700&q=85&auto=format&fit=crop', desc:'Smart robot vacuum with app-controlled scheduling.' },
+  { id:95, name:'WarmGlow Scented Candle Set', category:'Home', price:1299, oldPrice:null, rating:4.8, reviews:3391, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=700&q=85&auto=format&fit=crop', desc:'Set of 3 soy candles in cozy seasonal scents.' },
+  { id:96, name:'ProGrip Adjustable Dumbbells', category:'Sports', price:6999, oldPrice:8499, rating:4.2, reviews:1253, badge:'Sale', discount:18, img:'https://images.unsplash.com/photo-1523362628745-0c100150b504?w=700&q=85&auto=format&fit=crop', desc:'Space-saving dumbbells that adjust from 2.5kg to 24kg.' },
+  { id:97, name:'CoreFit Resistance Bands Set', category:'Sports', price:999, oldPrice:null, rating:4.5, reviews:864, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=700&q=85&auto=format&fit=crop', desc:'Set of 5 bands for strength and mobility training.' },
+  { id:98, name:'TrailBlaze Cycling Helmet', category:'Sports', price:2499, oldPrice:2999, rating:4.8, reviews:1372, badge:'Sale', discount:17, img:'https://images.unsplash.com/photo-1600718374662-0483d2b9da44?w=700&q=85&auto=format&fit=crop', desc:'Ventilated helmet with an adjustable safety fit.' },
+  { id:99, name:'SprintFlex Jump Rope', category:'Sports', price:599, oldPrice:null, rating:4.6, reviews:3578, badge:null, discount:null, img:'https://images.unsplash.com/photo-1517649763962-0c623066013b?w=700&q=85&auto=format&fit=crop', desc:'Speed rope with ball-bearing handles for cardio.' },
+  { id:100, name:'BaseCamp 2-Person Tent', category:'Sports', price:5499, oldPrice:6999, rating:4.1, reviews:3246, badge:'Sale', discount:21, img:'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=700&q=85&auto=format&fit=crop', desc:'Lightweight tent that sets up in under 5 minutes.' },
+  { id:101, name:'Nordic Coffee Table', category:'Furniture', price:7999, oldPrice:9999, rating:4.5, reviews:3954, badge:'Sale', discount:20, img:'https://images.unsplash.com/photo-1592078615290-033ee584e267?w=700&q=85&auto=format&fit=crop', desc:'Solid-wood coffee table with a minimalist Nordic design.' },
+  { id:102, name:'ErgoComfort Office Chair', category:'Furniture', price:8999, oldPrice:11499, rating:4.5, reviews:4652, badge:'Sale', discount:22, img:'https://images.unsplash.com/photo-1594620302200-9a762244a156?w=700&q=85&auto=format&fit=crop', desc:'Ergonomic chair with lumbar support and armrests.' },
+  { id:103, name:'Loft 3-Seater Sofa', category:'Furniture', price:28999, oldPrice:34999, rating:4.8, reviews:214, badge:'Sale', discount:17, img:'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=700&q=85&auto=format&fit=crop', desc:'Plush fabric sofa that anchors any living room.' },
+  { id:104, name:'Compact Shoe Cabinet', category:'Furniture', price:4499, oldPrice:null, rating:4.6, reviews:1058, badge:null, discount:null, img:'https://images.unsplash.com/photo-1550254478-ead40cc54513?w=700&q=85&auto=format&fit=crop', desc:'Space-saving cabinet with flip-down shoe compartments.' },
+  { id:105, name:'Wanderer Bedside Table', category:'Furniture', price:3299, oldPrice:3999, rating:4.8, reviews:2305, badge:'Sale', discount:18, img:'https://images.unsplash.com/photo-1538688525198-9b88f6f53126?w=700&q=85&auto=format&fit=crop', desc:'Two-drawer bedside table with a warm oak finish.' },
+  { id:106, name:'ZIBRORA Pulse 5G Smartphone', category:'Mobile', price:21999, oldPrice:25999, rating:4.5, reviews:1683, badge:'Sale', discount:15, img:'https://images.unsplash.com/photo-1585060544812-6b45742d762f?w=700&q=85&auto=format&fit=crop', desc:'All-day battery with a 108MP camera and 5G speeds.' },
+  { id:107, name:'AeroTab 11" Tablet', category:'Electronics', price:27999, oldPrice:32999, rating:4.6, reviews:912, badge:'Sale', discount:15, img:'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=700&q=85&auto=format&fit=crop', desc:'Slim tablet with a vivid 11" display, great for work and streaming.' },
+  { id:108, name:'Halo Studio Headphones', category:'Electronics', price:8999, oldPrice:11999, rating:4.7, reviews:2540, badge:'Sale', discount:25, img:'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=700&q=85&auto=format&fit=crop', desc:'Over-ear headphones with active noise cancellation and 40hr battery.' },
+  { id:109, name:'Highline Slim Backpack', category:'Accessories', price:2999, oldPrice:3799, rating:4.6, reviews:1204, badge:'Sale', discount:21, img:'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=700&q=85&auto=format&fit=crop', desc:'Minimalist daypack with a padded 15" laptop sleeve.' },
+  { id:110, name:'Aura Hydrating Face Mist', category:'Beauty', price:899, oldPrice:1199, rating:4.4, reviews:1780, badge:'Sale', discount:25, img:'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=700&q=85&auto=format&fit=crop', desc:'Refreshing rosewater mist for an instant hydration boost.' },
+  { id:111, name:'Meadow Cotton Kurta', category:'Clothing', price:2199, oldPrice:null, rating:4.5, reviews:640, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1622470953794-aa9c70b0fb9d?w=700&q=85&auto=format&fit=crop', desc:'Breathable cotton kurta with a relaxed everyday fit.' },
+  { id:112, name:'Stride Trail Sandals', category:'Footwear', price:2799, oldPrice:3499, rating:4.3, reviews:520, badge:'Sale', discount:20, img:'https://images.unsplash.com/photo-1603487742131-4160ec999306?w=700&q=85&auto=format&fit=crop', desc:'Rugged sport sandals with a shock-absorbing sole.' },
+  { id:113, name:'Solace Bean Bag Lounger', category:'Furniture', price:3999, oldPrice:4999, rating:4.5, reviews:980, badge:'Sale', discount:20, img:'https://images.unsplash.com/photo-1567016432779-094069958ea5?w=700&q=85&auto=format&fit=crop', desc:'Plush XXL bean bag for a cozy reading corner.' },
+  { id:114, name:'Vortex Adjustable Kettlebell', category:'Sports', price:3499, oldPrice:4299, rating:4.6, reviews:711, badge:'Sale', discount:19, img:'https://images.unsplash.com/photo-1517344368193-41552b6ad3f5?w=700&q=85&auto=format&fit=crop', desc:'Quick-adjust kettlebell that swaps between 4 weight settings.' },
+  { id:115, name:'Nimbus Travel Duffel', category:'Accessories', price:2599, oldPrice:null, rating:4.5, reviews:405, badge:'New', discount:null, img:'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=700&q=85&auto=format&fit=crop', desc:'Foldable duffel bag, perfect for weekend getaways.' },
+];
+
+/* =========================================================
+   CUSTOMER REVIEWS
+   Reviews are generated deterministically per product (seeded by
+   product id) so the same product always shows the same reviews,
+   ratings breakdown and helpful counts on every visit/render.
+   ========================================================= */
+const REVIEWER_NAMES = ['Arun K.','Priya S.','Rahul M.','Divya R.','Karthik V.','Sneha P.','Vignesh T.','Anitha N.','Suresh B.','Meena L.','Gokul R.','Lakshmi S.','Naveen D.','Pooja A.','Ramesh K.','Deepa M.'];
+const REVIEW_TITLES_POS = ['Excellent quality, highly recommend!','Exceeded my expectations','Great value for the price','Exactly as described','Love it, will buy again','Perfect purchase'];
+const REVIEW_TITLES_MID = ['Good, but a few tweaks needed','Decent for the price','Does the job well','Pretty satisfied overall'];
+const REVIEW_TITLES_LOW = ['Okay, not amazing','Average — expected a bit more'];
+const REVIEW_BODY_POS = [
+  'Been using this for a couple of weeks now and it has held up really well. Build quality feels premium and it matches the photos exactly.',
+  'Delivery was quick and the packaging was solid. Works exactly as advertised — no complaints at all from my side.',
+  'This is my second order of this product because the first one impressed my family so much. Worth every rupee.',
+  'Great finish and feels sturdy in hand. Customer support was also helpful when I had a sizing question before ordering.',
+  'Genuinely one of the better purchases I have made on ZIBRORA this year. Comfortable, well made and looks premium.'
+];
+const REVIEW_BODY_MID = [
+  'Overall a solid product for daily use. Not perfect, but it does what it promises and the price point makes it a fair deal.',
+  'Quality is good, though I expected slightly better packaging. The product itself performs well so far.',
+  'Works fine for my needs. Took a day longer than expected to arrive but the product quality made up for it.'
+];
+const REVIEW_BODY_LOW = [
+  'It is okay for the price, but I was expecting a bit more based on the description. Still usable though.',
+  'Average experience — nothing wrong with the product but nothing that stood out either.'
+];
+function seededRandom(seed) {
+  let s = seed % 2147483647; if (s <= 0) s += 2147483646;
+  return function () { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; };
+}
+function getProductReviews(p) {
+  const rnd = seededRandom(p.id * 9973 + 17);
+  const count = 3 + Math.floor(rnd() * 2); // 3-4 reviews per product
+  const daysAgoPool = [2,5,9,14,21,30,45,60,90];
+  const reviews = [];
+  for (let i = 0; i < count; i++) {
+    // vary star rating around the product's overall rating
+    const roll = rnd();
+    let stars = Math.round(p.rating);
+    if (roll < 0.15 && stars > 2) stars -= (roll < 0.05 ? 2 : 1);
+    else if (roll > 0.9 && stars < 5) stars += 1;
+    stars = Math.min(5, Math.max(1, stars));
+    let title, body;
+    if (stars >= 4) { title = REVIEW_TITLES_POS[Math.floor(rnd()*REVIEW_TITLES_POS.length)]; body = REVIEW_BODY_POS[Math.floor(rnd()*REVIEW_BODY_POS.length)]; }
+    else if (stars === 3) { title = REVIEW_TITLES_MID[Math.floor(rnd()*REVIEW_TITLES_MID.length)]; body = REVIEW_BODY_MID[Math.floor(rnd()*REVIEW_BODY_MID.length)]; }
+    else { title = REVIEW_TITLES_LOW[Math.floor(rnd()*REVIEW_TITLES_LOW.length)]; body = REVIEW_BODY_LOW[Math.floor(rnd()*REVIEW_BODY_LOW.length)]; }
+    const name = REVIEWER_NAMES[Math.floor(rnd()*REVIEWER_NAMES.length)];
+    reviews.push({
+      name, stars, title, body,
+      verified: rnd() > 0.2,
+      daysAgo: daysAgoPool[Math.floor(rnd()*daysAgoPool.length)],
+      helpful: Math.floor(rnd()*140) + 3
+    });
+  }
+  return reviews;
+}
+function reviewDateLabel(daysAgo) {
+  const d = new Date(); d.setDate(d.getDate() - daysAgo);
+  return d.toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+}
+function ratingBreakdown(reviews, overallRating) {
+  const counts = {5:0,4:0,3:0,2:0,1:0};
+  reviews.forEach(r => counts[r.stars]++);
+  const total = reviews.length;
+  return [5,4,3,2,1].map(star => {
+    const pct = total ? Math.round((counts[star] / total) * 100) : (star === Math.round(overallRating) ? 100 : 0);
+    return { star, pct };
+  });
+}
+const votedHelpful = new Set();
+function markHelpful(btn, reviewKey, productId) {
+  if (votedHelpful.has(reviewKey)) return;
+  votedHelpful.add(reviewKey);
+  const countEl = btn.querySelector('.hc');
+  countEl.textContent = Number(countEl.textContent) + 1;
+  btn.classList.add('voted');
+  const p = PRODUCTS.find(x => x.id === productId);
+  if (p) {
+    pushDataLayer('review-helpful-click', {
+      section: categorySlug(p.category), subsection: 'product-reviews',
+      click: { name: 'mark review helpful', type: 'button', page_section: 'body:reviews', nav_section: categorySlug(p.category), action: 'review helpful' }
+    });
+  }
+}
+function renderReviewsSection(p) {
+  const el = document.getElementById('reviewsSection');
+  if (!el) return;
+  const reviews = getProductReviews(p);
+  const breakdown = ratingBreakdown(reviews, p.rating);
+  el.innerHTML = `
+    <h3 class="reviews-title">Customer Reviews</h3>
+    <div class="reviews-layout">
+      <div class="review-summary-box">
+        <div class="review-avg">${p.rating.toFixed(1)}</div>
+        <div class="review-avg-stars stars">${'★'.repeat(Math.round(p.rating))}${'☆'.repeat(5-Math.round(p.rating))}</div>
+        <div class="review-avg-count">Based on ${p.reviews.toLocaleString()} ratings</div>
+        ${breakdown.map(b => `
+          <div class="rating-bar-row">
+            <span class="lbl">${b.star}★</span>
+            <div class="rating-bar-track"><div class="rating-bar-fill" style="width:${b.pct}%"></div></div>
+            <span class="pct">${b.pct}%</span>
+          </div>`).join('')}
+      </div>
+      <div class="review-list">
+        ${reviews.map((r, i) => {
+          const key = 'p' + p.id + '-r' + i;
+          const initials = r.name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+          return `
+          <div class="review-card">
+            <div class="review-head">
+              <div class="review-avatar">${initials}</div>
+              <div>
+                <div class="review-meta-name">${r.name} ${r.verified ? '<span class="verified-badge">✓ Verified Purchase</span>' : ''}</div>
+                <div class="review-meta-date">${reviewDateLabel(r.daysAgo)}</div>
+              </div>
+            </div>
+            <div class="review-stars-row"><span class="stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</span></div>
+            <div class="review-title-text">${r.title}</div>
+            <p class="review-body-text">${r.body}</p>
+            <div class="review-helpful">
+              <span>Was this helpful?</span>
+              <button class="helpful-btn" onclick="markHelpful(this,'${key}',${p.id})">👍 Helpful (<span class="hc">${r.helpful}</span>)</button>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+}
+
+/* =========================================================
+   ADOBE DATA LAYER — enterprise-style schema
+   Modelled after the real-world data layer sample you shared
+   (page.info / page.attributes / user / click / sort / filter /
+   form / ecommerce.items / cart). Every push carries the FULL
+   shape - fields that don't apply to a given event use "no bundle" /
+   "no package" / "n/a" placeholders, same as the real sample, so
+   Launch data elements always find the same paths.
+   ========================================================= */
+window.adobeDataLayer = window.adobeDataLayer || [];
+let isLoggedIn = false;
+let prevPageName = '';
+let prevPageURL = '';
+
+function formatINR(n) { return '₹' + Math.round(n).toLocaleString('en-IN'); }
+
+function currentSysEnv() { return window.innerWidth < 768 ? 'mobile' : 'desktop'; }
+
+function noItem() {
+  return { name: 'no bundle', id: 'no bundle', sku: 'no bundle', price: 'no bundle', quantity: 'no bundle' };
+}
+function noPackage() {
+  return { name: 'no package', type: 'no package', id: 'no package', sku: 'no package', price: 'no package', quantity: 'no package' };
+}
+
+function buildEcommerceItem(p, qty) {
+  return {
+    availability: 'available',
+    breadcrumb: 'zibrora>' + p.category.toLowerCase(),
+    item_category: p.category.toLowerCase(),
+    room: 'n/a',
+    price: String(p.price),
+    item_sku: 'SKU' + (100000 + p.id),
+    item_id: 'prod' + (100000 + p.id),
+    item_name: p.name.toLowerCase(),
+    bundle_name: 'no bundle',
+    bundle_id: 'no bundle',
+    bundle_sku: 'no bundle',
+    package_name: 'no package',
+    package_id: 'no package',
+    package_sku: 'no package',
+    package_type: 'no package',
+    package_price: 'no package',
+    package_quantity: 'no package',
+    add_to_room: 'n/a',
+    cart_add_location: 'body:',
+    quantity: qty || 1,
+    total_price: String(p.price * (qty || 1))
+  };
+}
+
+function buildCartObject() {
+  const subtotal = cart.reduce((s, c) => s + c.price * c.qty, 0);
+  const shipping = subtotal > 999 || subtotal === 0 ? 0 : 99;
+  return {
+    currency: 'INR',
+    cart_id: sessionStorage.getItem('cartId') || (function () {
+      const id = String(Date.now()).slice(-8);
+      sessionStorage.setItem('cartId', id);
+      return id;
+    })(),
+    cart_total_price: String(subtotal),
+    discount_value: '0',
+    delivery_type: 'delivery',
+    delivery_value: String(shipping),
+    tax: '0',
+    fees: '0'
+  };
+}
+
+/* The single, unified push - every event on the site funnels through
+   this so the object shape is always identical (matches the real
+   sample: one flattened event carrying page + user + click + sort +
+   filter + form + ecommerce + cart together). */
+function pushDataLayer(eventType, overrides) {
+  overrides = overrides || {};
+  const payload = {
+    event_type: eventType,
+    page: {
+      attributes: { geo_region: 'in', language: 'en-in', sys_env: currentSysEnv() },
+      info: {
+        page_name: 'zibrora:' + (overrides.section || 'home') + ':' + (overrides.subsection || 'home'),
+        page_type: 'ecommerce',
+        section: overrides.section || 'home',
+        subsection: overrides.subsection || 'home',
+        prev_page_name: prevPageName,
+        prev_page_url: prevPageURL
+      }
+    },
+    user: {
+      attributes: {
+        is_logged_in: String(isLoggedIn),
+        auth_source: isLoggedIn ? 'header:global nav:sign-in:manage account' : 'not applicable',
+        auth_type: isLoggedIn ? 'email' : 'not applicable'
+      },
+      profile: {
+        email: isLoggedIn ? 'admin@zibrora-demo.local' : 'not applicable',
+        internal_user: 'external user',
+        sf_contact_id: 'not applicable'
+      }
+    },
+    click: overrides.click || { name: 'not applicable', type: 'not applicable', page_section: 'not applicable', nav_section: 'not applicable', action: 'not applicable' },
+    sort: overrides.sort || { sort: sortMode === 'featured' ? 'relevant products' : sortMode },
+    filter: overrides.filter || { filter: activeCategory === 'All' ? 'all' : categorySlug(activeCategory) },
+    form: overrides.form || { name: 'no form', step: 'no form' },
+    ecommerce: overrides.ecommerce || { items: [], package: [noPackage()], bundle: [noItem()], discount: [{ type: 'no discount', code: 'no discount', value: 'no discount' }], fee: [] },
+    cart: overrides.cart || buildCartObject()
+  };
+  window.adobeDataLayer.push(payload);
+  // track for the NEXT push's prev_page_name / prev_page_url
+  prevPageName = payload.page.info.page_name;
+  prevPageURL = currentPath;
+}
+
+/* ---- convenience wrappers used across the router / cart / forms ---- */
+function pushPageLoad(section, subsection) {
+  pushDataLayer('page-load', { section, subsection });
+}
+function pushProductView(p) {
+  pushDataLayer('product-view', {
+    section: categorySlug(p.category),
+    subsection: 'product-detail',
+    ecommerce: { items: [buildEcommerceItem(p, 1)], package: [noPackage()], bundle: [noItem()], discount: [{ type: 'no discount', code: 'no discount', value: 'no discount' }], fee: [] }
+  });
+}
+function pushAddToCart(p, qty) {
+  pushDataLayer('add-to-cart', {
+    section: categorySlug(p.category),
+    subsection: 'product-detail',
+    click: { name: 'add to cart', type: 'button', page_section: 'body:', nav_section: 'shop:' + categorySlug(p.category), action: 'add to cart' },
+    ecommerce: { items: [buildEcommerceItem(p, qty)], package: [noPackage()], bundle: [noItem()], discount: [{ type: 'no discount', code: 'no discount', value: 'no discount' }], fee: [] }
+  });
+}
+function pushRemoveFromCart(p) {
+  pushDataLayer('remove-from-cart', {
+    section: 'cart', subsection: 'cart',
+    click: { name: 'remove from cart', type: 'button', page_section: 'body:', nav_section: 'cart', action: 'remove from cart' },
+    ecommerce: { items: [buildEcommerceItem(p, 1)], package: [noPackage()], bundle: [noItem()], discount: [{ type: 'no discount', code: 'no discount', value: 'no discount' }], fee: [] }
+  });
+}
+function pushNavClick(name, section) {
+  pushDataLayer('nav-click', {
+    section, subsection: section,
+    click: { name: name, type: 'link', page_section: 'header:nav', nav_section: name, action: 'navigate' }
+  });
+}
+function pushSearch(term, resultCount, filterApplied) {
+  pushDataLayer('search', {
+    section: 'search', subsection: 'search-results',
+    click: { name: 'search', type: 'submit', page_section: 'header:search', nav_section: 'search', action: 'search' },
+    filter: { filter: filterApplied || 'all' },
+    form: { name: 'search', step: 'form submit', term: term, resultCount: resultCount }
+  });
+}
+function pushFormEvent(formName, step) {
+  pushDataLayer('form-event', {
+    section: 'support', subsection: 'contact-us',
+    form: { name: formName, step: step }
+  });
+}
+function pushCheckoutInitiated() {
+  pushDataLayer('checkout-initiated', {
+    section: 'checkout', subsection: 'checkout',
+    click: { name: 'proceed to checkout', type: 'button', page_section: 'body:', nav_section: 'cart', action: 'checkout initiated' },
+    ecommerce: { items: cart.map(c => buildEcommerceItem(c, c.qty)), package: [noPackage()], bundle: [noItem()], discount: [{ type: 'no discount', code: 'no discount', value: 'no discount' }], fee: [] }
+  });
+}
+function pushPurchase(orderId, total, paymentMethod) {
+  if (sessionStorage.getItem('orderTracked_' + orderId)) return;
+  pushDataLayer('purchase', {
+    section: 'checkout', subsection: 'order-confirmation',
+    click: { name: 'place order', type: 'button', page_section: 'body:', nav_section: 'checkout', action: 'place order' },
+    form: { name: 'checkout address form', step: 'form submit' },
+    ecommerce: { items: cart.map(c => buildEcommerceItem(c, c.qty)), package: [noPackage()], bundle: [noItem()], discount: [{ type: 'no discount', code: 'no discount', value: 'no discount' }], fee: [] },
+    cart: Object.assign(buildCartObject(), { cart_total_price: String(total), payment_method: paymentMethod, order_id: orderId })
+  });
+  sessionStorage.setItem('orderTracked_' + orderId, 'true');
+}
+
+/* =========================================================
+   ROUTER — this is what makes the URL actually change
+   ========================================================= */
+let cart = [];
+let wishlist = new Set();
+let activeCategory = 'All';
+let searchTerm = '';
+let sortMode = 'featured';
+
+// Real, clean URLs (no #) using the History API where possible.
+// IMPORTANT: when this file is opened directly (file://, double-click),
+// browsers block pushState from changing the path for security reasons -
+// so we keep our OWN "currentPath" in memory and only try to also update
+// the visible address bar. If that fails (file://), navigation still
+// works perfectly inside the page - you just won't see the URL change
+// until you deploy it to a real server (Vercel etc).
+let currentPath = (window.location.protocol === 'file:')
+  ? '/'
+  : (window.location.pathname === '/index.html' ? '/' : window.location.pathname);
+
+function navigate(path) {
+  if (currentPath === path) return;
+  currentPath = path;
+  try {
+    history.pushState({}, '', path);
+  } catch (e) {
+    // file:// (or other sandboxed) environment - address bar can't change,
+    // but the page itself still routes correctly using currentPath below.
+  }
+  router();
+}
+
+function categorySlug(name) { return name.toLowerCase().replace(/\s+/g, '-'); }
+function findCategoryBySlug(slug) {
+  const found = CATEGORIES.find(c => categorySlug(c) === slug);
+  return found || 'All';
+}
+
+function router() {
+  const path = currentPath;
+  const parts = path.split('/').filter(Boolean); // e.g. ['category','beauty']
+
+  hideAllPages();
+
+  if (parts.length === 0) {
+    showHome();
+  } else if (parts[0] === 'category') {
+    showCategory(findCategoryBySlug(parts[1] || 'all'));
+  } else if (parts[0] === 'search') {
+    showSearch(decodeURIComponent(parts[1] || ''));
+  } else if (parts[0] === 'product') {
+    showProduct(Number(parts[1]));
+  } else if (parts[0] === 'cart') {
+    showCartPage();
+  } else if (parts[0] === 'checkout') {
+    showCheckout();
+  } else if (parts[0] === 'thankyou') {
+    showThankYou(parts[1]);
+  } else if (parts[0] === 'support') {
+    showSupport();
+  } else {
+    showHome();
+  }
+  window.scrollTo(0, 0);
+}
+window.addEventListener('popstate', function () {
+  currentPath = window.location.pathname === '/index.html' ? '/' : window.location.pathname;
+  router();
+});
+
+function hideAllPages() {
+  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+}
+function setBreadcrumb(items) {
+  // items: [{label, path}] last one has no path (current)
+  document.getElementById('breadcrumb').innerHTML = items.map((it, i) => {
+    if (i === items.length - 1) return `<span class="current">${it.label}</span>`;
+    return `<a onclick="navigate('${it.path}')">${it.label}</a><span class="sep">/</span>`;
+  }).join('');
+}
+
+function showHome() {
+  document.title = 'ZIBRORA — Shop Better';
+  document.getElementById('page-home').classList.add('active');
+  setBreadcrumb([{label:'Home'}]);
+  renderNav('All');
+  renderHomeGrid();
+  renderCategoryIcons();
+  pushPageLoad('home', 'home');
+}
+
+/* ---- category icon strip (uses the real CATEGORIES list, just shown as icons) ---- */
+const CAT_ICON_MAP = { All:'✨', Furniture:'🛋️', Mobile:'📱', Electronics:'🎧', Accessories:'👜', Beauty:'💄', Clothing:'👗', Footwear:'👟', Home:'🏠', Sports:'🏋️' };
+function renderCategoryIcons() {
+  const el = document.getElementById('catStrip');
+  if (!el) return;
+  el.innerHTML = CATEGORIES.filter(c => c !== 'All').map(c => `
+    <div class="cat-strip-item" onclick="navigate('/category/${categorySlug(c)}')">
+      <div class="cat-strip-icon">${CAT_ICON_MAP[c] || '🛍️'}</div>
+      <span class="lbl">${c}</span>
+    </div>`).join('');
+}
+
+/* ---- hero image carousel (purely visual) ---- */
+const HERO_SLIDES = [
+  'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1000&q=80',
+  'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1000&q=80',
+  'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1000&q=80'
+];
+function bannerFallback(i) {
+  const THEMES = [
+    { bg1:'#FDE68A', bg2:'#F59E0B', accent:'#92400E' },
+    { bg1:'#BFDBFE', bg2:'#3B82F6', accent:'#1E3A8A' },
+    { bg1:'#FBCFE8', bg2:'#EC4899', accent:'#831843' }
+  ];
+  const t = THEMES[i % THEMES.length];
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="880" viewBox="0 0 1000 880" preserveAspectRatio="xMidYMid slice">
+  <rect width="1000" height="880" fill="${t.bg1}"/>
+  <circle cx="850" cy="120" r="220" fill="${t.bg2}" opacity=".35"/>
+  <circle cx="120" cy="760" r="260" fill="${t.bg2}" opacity=".3"/>
+  <circle cx="500" cy="440" r="300" fill="#fff" opacity=".2"/>
+  <g transform="translate(500,440)" opacity=".9">
+    <rect x="-140" y="-100" width="280" height="220" rx="26" fill="none" stroke="${t.accent}" stroke-width="10"/>
+    <path d="M-70 -100 V-150 A70 70 0 0 1 70 -150 V-100" fill="none" stroke="${t.accent}" stroke-width="10"/>
+    <circle cx="-60" cy="10" r="10" fill="${t.accent}"/>
+    <circle cx="60" cy="10" r="10" fill="${t.accent}"/>
+  </g>
+  <g transform="translate(230,690)" opacity=".85">
+    <polygon points="0,-40 12,-12 42,-8 20,12 26,42 0,26 -26,42 -20,12 -42,-8 -12,-12" fill="${t.accent}"/>
+  </g>
+  <g transform="translate(780,640)" opacity=".85">
+    <polygon points="0,-32 10,-10 34,-6 16,10 21,34 0,21 -21,34 -16,10 -34,-6 -10,-10" fill="${t.accent}"/>
+  </g>
+  </svg>`;
+  return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+}
+let heroIdx = 0;
+function heroSlide(dir) {
+  heroIdx = (heroIdx + dir + HERO_SLIDES.length) % HERO_SLIDES.length;
+  renderHeroSlide();
+}
+function renderHeroSlide() {
+  const img = document.getElementById('heroImg');
+  const dots = document.getElementById('heroDots');
+  if (!img || !dots) return;
+  img.src = bannerFallback(heroIdx);
+  img.dataset.real = HERO_SLIDES[heroIdx];
+  img.dataset.upgraded = '';
+  tryUpgradeImage(img);
+  dots.innerHTML = HERO_SLIDES.map((_, i) => `<span class="${i===heroIdx?'active':''}" onclick="heroIdx=${i};renderHeroSlide()"></span>`).join('');
+}
+renderHeroSlide();
+setInterval(() => heroSlide(1), 6000);
+
+/* ---- wishlist quick-view (visual affordance in header) ---- */
+function toggleWishlistPanel() {
+  showToast(wishlist.size ? `You have ${wishlist.size} item(s) in your wishlist` : 'Your wishlist is empty — tap the heart on any product');
+}
+
+function showCategory(cat) {
+  activeCategory = cat; searchTerm = '';
+  document.title = (cat === 'All' ? 'All Products' : cat) + ' — ZIBRORA';
+  document.getElementById('page-category').classList.add('active');
+  document.getElementById('sectionTitle').textContent = cat === 'All' ? 'All Products' : cat;
+  document.getElementById('sectionSub').textContent = 'Discover our curated selection of premium products';
+  setBreadcrumb([{label:'Home',path:'/'},{label: cat === 'All' ? 'All Products' : cat}]);
+  renderNav(cat);
+  renderProducts();
+  pushPageLoad(categorySlug(cat), 'product-listing');
+}
+
+function showSupport() {
+  document.title = 'Contact Us — ZIBRORA';
+  document.getElementById('page-support').classList.add('active');
+  setBreadcrumb([{label:'Home',path:'/'},{label:'Contact Us'}]);
+  renderNav('');
+  pushPageLoad('support', 'contact-us');
+  pushFormEvent('contact us form', 'form initiated');
+}
+
+function showSearch(term) {
+  searchTerm = term.toLowerCase(); activeCategory = 'All';
+  document.title = 'Search: ' + term + ' — ZIBRORA';
+  document.getElementById('page-category').classList.add('active');
+  document.getElementById('sectionTitle').textContent = 'Search results for "' + term + '"';
+  document.getElementById('sectionSub').textContent = '';
+  setBreadcrumb([{label:'Home',path:'/'},{label:'Search: ' + term}]);
+  renderNav('All');
+  const list = renderProducts();
+  pushPageLoad('search', 'search-results');
+  pushSearch(term, list.length, activeCategory === 'All' ? 'all' : categorySlug(activeCategory));
+}
+
+function showProduct(id) {
+  const p = PRODUCTS.find(x => x.id === id);
+  if (!p) { navigate('/'); return; }
+  document.title = p.name + ' — ZIBRORA';
+  document.getElementById('page-product').classList.add('active');
+  setBreadcrumb([{label:'Home',path:'/'},{label:p.category,path:'/category/'+categorySlug(p.category)},{label:p.name}]);
+  renderNav(p.category);
+
+  document.getElementById('pdpContent').innerHTML = `
+    <div class="pdp-img">${productImgTag(p, '', '')}</div>
+    <div>
+      <div class="pdp-cat"><a onclick="navigate('/category/${categorySlug(p.category)}')" style="cursor:pointer">${p.category}</a></div>
+      <h1 class="pdp-title">${p.name}</h1>
+      <div class="pdp-rating"><span class="stars">${'★'.repeat(Math.floor(p.rating))}</span> ${p.rating} (${p.reviews.toLocaleString()} reviews)</div>
+      <div class="pdp-price"><span class="price-current">${formatINR(p.price)}</span>${p.oldPrice ? `<span class="price-old">${formatINR(p.oldPrice)}</span>` : ''}</div>
+      <p class="pdp-desc">${p.desc}</p>
+      <div class="qty-row">
+        <div class="qty-box">
+          <button onclick="changePdpQty(-1)">−</button><span id="pdpQty">1</span><button onclick="changePdpQty(1)">+</button>
+        </div>
+      </div>
+      <div class="pdp-actions">
+        <button class="btn-add-cart-lg" onclick="addToCart(${p.id}, Number(document.getElementById('pdpQty').textContent))">Add to Cart</button>
+      </div>
+    </div>`;
+
+  const related = PRODUCTS.filter(x => x.category === p.category && x.id !== p.id).slice(0, 4);
+  document.getElementById('relatedGrid').innerHTML = related.map(productCardHTML).join('');
+
+  renderReviewsSection(p);
+
+  pushPageLoad(categorySlug(p.category), 'product-detail');
+  pushProductView(p);
+  pushDataLayer('review-view', {
+    section: categorySlug(p.category), subsection: 'product-reviews',
+    click: { name: 'view reviews', type: 'section', page_section: 'body:reviews', nav_section: categorySlug(p.category), action: 'view reviews' }
+  });
+}
+function changePdpQty(delta) {
+  const el = document.getElementById('pdpQty');
+  const val = Math.max(1, Number(el.textContent) + delta);
+  el.textContent = val;
+}
+
+function showCartPage() {
+  document.title = 'Your Cart — ZIBRORA';
+  document.getElementById('page-cart').classList.add('active');
+  setBreadcrumb([{label:'Home',path:'/'},{label:'Cart'}]);
+  renderNav('');
+  renderCartPage();
+  renderRecommendations('cartRecoGrid');
+  pushPageLoad('cart', 'cart');
+}
+
+function showCheckout() {
+  document.title = 'Checkout — ZIBRORA';
+  document.getElementById('page-checkout').classList.add('active');
+  setBreadcrumb([{label:'Home',path:'/'},{label:'Cart',path:'/cart'},{label:'Checkout'}]);
+  renderNav('');
+  renderCheckoutSummary();
+  renderRecommendations('checkoutRecoGrid');
+  pushPageLoad('checkout', 'checkout');
+  pushCheckoutInitiated();
+}
+
+/* =========================================================
+   RECOMMENDATION ENGINE
+   Suggests related products on the Cart & Checkout pages,
+   based on the categories of items already in the cart.
+   ========================================================= */
+function getRecommendedProducts(limit) {
+  limit = limit || 6;
+  const cartIds = new Set(cart.map(c => c.id));
+
+  if (!cart.length) {
+    // Empty cart: fall back to top-rated products across the catalog.
+    return [...PRODUCTS].sort((a, b) => (b.rating * Math.log(b.reviews + 1)) - (a.rating * Math.log(a.reviews + 1))).slice(0, limit);
+  }
+
+  // Categories present in the cart, in the order items were added.
+  const cartCategories = [];
+  cart.forEach(c => {
+    const p = PRODUCTS.find(pr => pr.id === c.id);
+    if (p && !cartCategories.includes(p.category)) cartCategories.push(p.category);
+  });
+
+  const score = p => p.rating + Math.log(p.reviews + 1) * 0.3;
+  const byCategory = {};
+  cartCategories.forEach(cat => {
+    byCategory[cat] = PRODUCTS
+      .filter(p => p.category === cat && !cartIds.has(p.id))
+      .sort((a, b) => score(b) - score(a));
+  });
+
+  // Round-robin across cart categories so recs stay varied, not dominated by one category.
+  const picks = [];
+  const seen = new Set();
+  let added = true;
+  while (picks.length < limit && added) {
+    added = false;
+    for (const cat of cartCategories) {
+      if (picks.length >= limit) break;
+      const next = byCategory[cat].find(p => !seen.has(p.id));
+      if (next) { picks.push(next); seen.add(next.id); added = true; }
+    }
+  }
+
+  // Fill any remaining slots with top-rated products overall.
+  if (picks.length < limit) {
+    const fillers = PRODUCTS
+      .filter(p => !cartIds.has(p.id) && !seen.has(p.id))
+      .sort((a, b) => score(b) - score(a));
+    for (const p of fillers) {
+      if (picks.length >= limit) break;
+      picks.push(p);
+      seen.add(p.id);
+    }
+  }
+  return picks.slice(0, limit);
+}
+
+function renderRecommendations(containerId) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const recs = getRecommendedProducts(6);
+  el.innerHTML = recs.map(p => productCardHTML(p)).join('');
+}
+
+function showThankYou(orderId) {
+  document.title = 'Order Confirmed — ZIBRORA';
+  document.getElementById('page-thankyou').classList.add('active');
+  setBreadcrumb([{label:'Home',path:'/'},{label:'Order Confirmed'}]);
+  renderNav('');
+  document.getElementById('orderIdDisplay').textContent = 'Order ID: ' + orderId;
+  pushPageLoad('checkout', 'order-confirmation');
+}
+
+/* =========================================================
+   NAV / RENDER
+   ========================================================= */
+function renderNav(active) {
+  const nav = document.getElementById('navInner');
+  nav.innerHTML = CATEGORIES.map(c => `<button class="nav-btn${c===active?' active':''}" onclick="navigate('/category/${categorySlug(c)}')">${c}</button>`).join('');
+}
+
+function renderHomeGrid() {
+  const featured = PRODUCTS.filter(p => p.badge).slice(0, 8);
+  document.getElementById('homeGrid').innerHTML = featured.map(productCardHTML).join('');
+}
+
+function getFiltered() {
+  let list = PRODUCTS.filter(p => {
+    const matchCat = activeCategory === 'All' || p.category === activeCategory;
+    const matchSearch = !searchTerm || p.name.toLowerCase().includes(searchTerm) || p.category.toLowerCase().includes(searchTerm);
+    return matchCat && matchSearch;
+  });
+  if (sortMode === 'price-asc') list.sort((a,b)=>a.price-b.price);
+  else if (sortMode === 'price-desc') list.sort((a,b)=>b.price-a.price);
+  else if (sortMode === 'rating') list.sort((a,b)=>b.rating-a.rating);
+  else if (sortMode === 'newest') list.sort((a,b)=>b.id-a.id);
+  return list;
+}
+
+function renderProducts() {
+  const list = getFiltered();
+  document.getElementById('resultsCount').innerHTML = `Showing <strong>${list.length}</strong> of <strong>${PRODUCTS.length}</strong> products`;
+  const grid = document.getElementById('productGrid');
+  grid.innerHTML = list.length ? list.map(productCardHTML).join('') : `<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--text2)">No products found.</div>`;
+  return list;
+}
+function sortProducts(val) { sortMode = val; renderProducts(); }
+
+
+function productFallback(p) {
+  const PALETTES = [
+    ['#FFF7ED','#FDBA74','#C2410C'], ['#EFF6FF','#93C5FD','#1D4ED8'],
+    ['#FDF4FF','#E9A8FF','#9333EA'], ['#F0FDF4','#86EFAC','#15803D'],
+    ['#FEF2F2','#FCA5A5','#B91C1C'], ['#ECFEFF','#67E8F9','#0E7490'],
+    ['#FFFBEB','#FCD34D','#B45309'], ['#FDF2F8','#F9A8D4','#BE185D'],
+    ['#F5F3FF','#C4B5FD','#6D28D9'], ['#F0FDFA','#5EEAD4','#0F766E'],
+    ['#FFF1F2','#FDA4AF','#BE123C'], ['#F7FEE7','#BEF264','#4D7C0F']
+  ];
+  function detectIconKey(prod) {
+    const n = (prod.name + ' ' + prod.category).toLowerCase();
+    const tests = [
+      [/phone|mobile|smartphone/, 'smartphone'], [/laptop|notebook/, 'laptop'],
+      [/tablet|ipad/, 'tablet'], [/\btv\b|television/, 'tv'],
+      [/headphone|earbud|earphone/, 'headphones'], [/speaker/, 'speaker'],
+      [/camera/, 'camera'], [/watch/, 'watch'],
+      [/charger|power bank|cable|adapter/, 'charger'],
+      [/shoe|sneaker|sandal|boot|footwear/, 'shoe'],
+      [/bag|backpack|duffel|luggage/, 'bag'],
+      [/shirt|kurta|dress|jacket|hoodie|jean|trouser|top\b|clothing/, 'shirt'],
+      [/chair|sofa|table|desk|shelf|\bbed\b|lounger|bean bag|furniture/, 'chair'],
+      [/lamp|light/, 'lamp'],
+      [/bottle|kettle|mug|flask|cookware|\bpan\b/, 'bottle'],
+      [/cream|serum|mist|lotion|shampoo|perfume|beauty|skincare/, 'beauty'],
+      [/dumbbell|kettlebell|yoga|\bmat\b|sports|fitness|bicycle|cycle/, 'sports']
+    ];
+    for (const [re, key] of tests) if (re.test(n)) return key;
+    return 'default';
+  }
+  function iconSVG(key, c) {
+    switch (key) {
+      case 'smartphone': return `<rect x="-38" y="-70" width="76" height="140" rx="14" fill="none" stroke="${c}" stroke-width="7"/><circle cx="0" cy="55" r="5" fill="${c}"/><rect x="-24" y="-52" width="48" height="88" rx="3" fill="${c}" opacity=".18"/>`;
+      case 'laptop': return `<rect x="-70" y="-45" width="140" height="85" rx="6" fill="none" stroke="${c}" stroke-width="7"/><path d="M-85 55 L85 55 L70 75 L-70 75 Z" fill="${c}" opacity=".85"/>`;
+      case 'tablet': return `<rect x="-55" y="-75" width="110" height="150" rx="12" fill="none" stroke="${c}" stroke-width="7"/><circle cx="0" cy="60" r="5" fill="${c}"/>`;
+      case 'tv': return `<rect x="-90" y="-60" width="180" height="110" rx="8" fill="none" stroke="${c}" stroke-width="7"/><line x1="-30" y1="70" x2="30" y2="70" stroke="${c}" stroke-width="7"/><line x1="0" y1="50" x2="0" y2="70" stroke="${c}" stroke-width="7"/>`;
+      case 'headphones': return `<path d="M-70 10 A70 70 0 0 1 70 10" fill="none" stroke="${c}" stroke-width="9"/><rect x="-85" y="0" width="30" height="55" rx="12" fill="${c}"/><rect x="55" y="0" width="30" height="55" rx="12" fill="${c}"/>`;
+      case 'speaker': return `<rect x="-45" y="-85" width="90" height="170" rx="16" fill="none" stroke="${c}" stroke-width="7"/><circle cx="0" cy="-35" r="18" fill="none" stroke="${c}" stroke-width="6"/><circle cx="0" cy="35" r="30" fill="none" stroke="${c}" stroke-width="6"/>`;
+      case 'camera': return `<rect x="-80" y="-40" width="160" height="105" rx="10" fill="none" stroke="${c}" stroke-width="7"/><circle cx="0" cy="15" r="38" fill="none" stroke="${c}" stroke-width="7"/><rect x="-30" y="-62" width="60" height="24" rx="4" fill="${c}"/>`;
+      case 'watch': return `<circle cx="0" cy="0" r="52" fill="none" stroke="${c}" stroke-width="8"/><rect x="-22" y="-85" width="44" height="35" rx="6" fill="${c}" opacity=".8"/><rect x="-22" y="50" width="44" height="35" rx="6" fill="${c}" opacity=".8"/>`;
+      case 'charger': return `<polygon points="10,-90 -45,10 -5,10 -15,90 55,-15 10,-15" fill="${c}"/>`;
+      case 'shoe': return `<path d="M-85 30 Q-85 -10 -50 -15 L-10 -45 Q20 -55 40 -35 L70 -10 Q90 5 90 30 Z" fill="none" stroke="${c}" stroke-width="7" stroke-linejoin="round"/>`;
+      case 'bag': return `<rect x="-60" y="-30" width="120" height="100" rx="10" fill="none" stroke="${c}" stroke-width="7"/><path d="M-30 -30 V-55 A30 30 0 0 1 30 -55 V-30" fill="none" stroke="${c}" stroke-width="7"/>`;
+      case 'shirt': return `<path d="M-55 -55 L-20 -75 L0 -55 L20 -75 L55 -55 L70 -25 L45 -10 L45 75 L-45 75 L-45 -10 L-70 -25 Z" fill="none" stroke="${c}" stroke-width="7" stroke-linejoin="round"/>`;
+      case 'chair': return `<rect x="-45" y="-80" width="90" height="70" rx="6" fill="none" stroke="${c}" stroke-width="7"/><rect x="-55" y="-10" width="110" height="20" rx="4" fill="none" stroke="${c}" stroke-width="7"/><line x1="-45" y1="10" x2="-50" y2="80" stroke="${c}" stroke-width="7"/><line x1="45" y1="10" x2="50" y2="80" stroke="${c}" stroke-width="7"/>`;
+      case 'lamp': return `<polygon points="-40,-30 40,-30 55,30 -55,30" fill="none" stroke="${c}" stroke-width="7" stroke-linejoin="round"/><line x1="0" y1="30" x2="0" y2="80" stroke="${c}" stroke-width="7"/><ellipse cx="0" cy="88" rx="35" ry="9" fill="none" stroke="${c}" stroke-width="7"/>`;
+      case 'bottle': return `<rect x="-15" y="-90" width="30" height="20" rx="4" fill="${c}"/><path d="M-15 -70 L-32 -45 L-32 75 Q-32 85 -22 85 L22 85 Q32 85 32 75 L32 -45 L15 -70 Z" fill="none" stroke="${c}" stroke-width="7" stroke-linejoin="round"/>`;
+      case 'beauty': return `<rect x="-38" y="-30" width="76" height="100" rx="14" fill="none" stroke="${c}" stroke-width="7"/><rect x="-24" y="-55" width="48" height="28" rx="8" fill="${c}"/>`;
+      case 'sports': return `<line x1="-65" y1="0" x2="65" y2="0" stroke="${c}" stroke-width="9"/><circle cx="-75" cy="0" r="24" fill="none" stroke="${c}" stroke-width="9"/><circle cx="75" cy="0" r="24" fill="none" stroke="${c}" stroke-width="9"/>`;
+      default: return `<rect x="-55" y="-45" width="110" height="95" rx="8" fill="none" stroke="${c}" stroke-width="7"/><line x1="-55" y1="-5" x2="55" y2="-5" stroke="${c}" stroke-width="7"/><line x1="0" y1="-45" x2="0" y2="-5" stroke="${c}" stroke-width="7"/><path d="M-20 -45 Q-20 -70 0 -70 Q20 -70 20 -45" fill="none" stroke="${c}" stroke-width="7"/>`;
+    }
+  }
+  const idx = p.id % PALETTES.length;
+  const [bgLight, bgMid, fg] = PALETTES[idx];
+  const icon = iconSVG(detectIconKey(p), fg);
+  const safe = String(p.name || 'ZIBRORA PRODUCT').replace(/[<>&"]/g,'');
+  const cat = String(p.category || 'PRODUCT').toUpperCase();
+  const rot = (p.id * 37) % 360;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="700" height="700" viewBox="0 0 700 700">
+  <rect width="700" height="700" fill="${bgLight}"/>
+  <g opacity=".3" transform="rotate(${rot} 350 270)">
+    <circle cx="120" cy="130" r="60" fill="${bgMid}"/>
+    <circle cx="590" cy="420" r="95" fill="${bgMid}"/>
+  </g>
+  <circle cx="350" cy="270" r="150" fill="#fff" opacity=".92"/>
+  <circle cx="350" cy="270" r="150" fill="none" stroke="${bgMid}" stroke-width="2"/>
+  <g transform="translate(350,270)">${icon}</g>
+  <text x="350" y="480" text-anchor="middle" font-family="Arial" font-size="16" font-weight="700" letter-spacing="3" fill="${fg}">${cat}</text>
+  <text x="350" y="518" text-anchor="middle" font-family="Arial" font-size="24" font-weight="700" fill="#172337">${safe.slice(0,28)}</text>
+  <rect x="215" y="545" width="270" height="4" rx="2" fill="${fg}" opacity=".35"/>
+  <text x="350" y="598" text-anchor="middle" font-family="Arial" font-size="14" letter-spacing="1" fill="#64748b">ZIBRORA · ${formatINR(p.price)}</text>
+  </svg>`;
+  return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+}
+
+/* ---- guaranteed-render image loading ----
+   Some networks / preview sandboxes block third-party photo CDNs
+   (Unsplash etc). To make sure a product image is ALWAYS visible,
+   every <img> starts on the locally-generated SVG illustration
+   (zero network dependency) and silently upgrades to the real
+   product photo in the background only if/when it actually loads. */
+function productImgTag(p, cssClass, extraAttrs) {
+  const svgSrc = productFallback(p);
+  const safeName = String(p.name).replace(/"/g,'&quot;');
+  return `<img class="${cssClass}" src="${svgSrc}" data-real="${p.img}" alt="${safeName}" ${extraAttrs || ''} onload="tryUpgradeImage(this)">`;
+}
+function tryUpgradeImage(imgEl) {
+  if (imgEl.dataset.upgraded === '1') return;
+  imgEl.dataset.upgraded = '1';
+  const realSrc = imgEl.dataset.real;
+  if (!realSrc) return;
+  const test = new Image();
+  test.onload = () => { imgEl.src = realSrc; };
+  test.onerror = () => { /* real photo unreachable — keep the SVG illustration */ };
+  test.src = realSrc;
+}
+
+function productCardHTML(p) {
+  const w = wishlist.has(p.id);
+  const inCart = cart.find(c => c.id === p.id);
+  return `
+  <div class="product-card" onclick="navigate('/product/${p.id}')">
+    <div class="product-img">
+      ${productImgTag(p, '', 'loading="lazy"')}
+      ${p.discount ? `<span class="badge badge-sale">-${p.discount}%</span>` : (p.badge ? `<span class="badge badge-${p.badge.toLowerCase()}">${p.badge}</span>` : '')}
+      <button class="wishlist-btn" onclick="event.stopPropagation();toggleWishlist(${p.id})">${w?'❤️':'🤍'}</button>
+    </div>
+    <div class="product-info">
+      <div class="product-category">${p.category}</div>
+      <div class="product-name">${p.name}</div>
+      <div class="product-rating"><span class="stars">${'★'.repeat(Math.floor(p.rating))}</span><span>${p.rating} (${p.reviews.toLocaleString()})</span></div>
+      <div class="product-price"><span class="price-current">${formatINR(p.price)}</span>${p.oldPrice ? `<span class="price-old">${formatINR(p.oldPrice)}</span>` : ''}</div>
+      <button class="btn-add-cart${inCart?' added':''}" onclick="event.stopPropagation();addToCart(${p.id})">${inCart?'Added ✓':'Add to Cart'}</button>
+    </div>
+  </div>`;
+}
+
+function runSearch() {
+  const term = document.getElementById('searchInput').value.trim();
+  if (!term) return;
+  navigate('/search/' + encodeURIComponent(term));
+}
+
+function toggleWishlist(id) {
+  if (wishlist.has(id)) wishlist.delete(id); else wishlist.add(id);
+  showToast(wishlist.has(id) ? 'Added to wishlist!' : 'Removed from wishlist');
+  refreshCurrentGrid();
+}
+function refreshCurrentGrid() {
+  if (document.getElementById('page-home').classList.contains('active')) renderHomeGrid();
+  if (document.getElementById('page-category').classList.contains('active')) renderProducts();
+}
+
+/* =========================================================
+   CART LOGIC
+   ========================================================= */
+function addToCart(id, qty) {
+  qty = qty || 1;
+  const p = PRODUCTS.find(x => x.id === id);
+  const existing = cart.find(c => c.id === id);
+  if (existing) existing.qty += qty; else cart.push({...p, qty});
+  updateCartUI();
+  refreshCurrentGrid();
+  if (document.getElementById('page-cart').classList.contains('active')) { renderCartPage(); renderRecommendations('cartRecoGrid'); }
+  if (document.getElementById('page-checkout').classList.contains('active')) { renderCheckoutSummary(); renderRecommendations('checkoutRecoGrid'); }
+  showToast(p.name + ' added to cart!');
+  const total = cart.reduce((s,c)=>s+c.price*c.qty,0);
+  pushAddToCart(p, qty, total);
+}
+function removeFromCart(id) {
+  const p = cart.find(c => c.id === id);
+  cart = cart.filter(c => c.id !== id);
+  updateCartUI(); renderCartItems();
+  if (document.getElementById('page-cart').classList.contains('active')) { renderCartPage(); renderRecommendations('cartRecoGrid'); }
+  if (document.getElementById('page-checkout').classList.contains('active')) { renderCheckoutSummary(); renderRecommendations('checkoutRecoGrid'); }
+  if (p) pushRemoveFromCart(p);
+}
+function changeQty(id, delta) {
+  const item = cart.find(c => c.id === id);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) { removeFromCart(id); return; }
+  updateCartUI(); renderCartItems();
+  if (document.getElementById('page-cart').classList.contains('active')) { renderCartPage(); renderRecommendations('cartRecoGrid'); }
+  if (document.getElementById('page-checkout').classList.contains('active')) { renderCheckoutSummary(); renderRecommendations('checkoutRecoGrid'); }
+}
+function updateCartUI() {
+  const total = cart.reduce((s,c)=>s+c.qty,0);
+  const badge = document.getElementById('cartBadge');
+  badge.style.display = total > 0 ? 'flex' : 'none';
+  badge.textContent = total;
+  const title = document.getElementById('cartDrawerTitle');
+  if (title) title.textContent = 'My Cart (' + total + ')';
+}
+function renderCartItems() {
+  const container = document.getElementById('cartItems');
+  const footer = document.getElementById('cartFooter');
+  if (!cart.length) {
+    container.innerHTML = `<div class="cart-empty">Your cart is empty</div>`;
+    footer.style.display = 'none';
+    return;
+  }
+  const total = cart.reduce((s,c)=>s+c.price*c.qty,0);
+  const t2 = document.getElementById('cartTotal2');
+  if (t2) t2.textContent = formatINR(total);
+  container.innerHTML = cart.map(c => `
+    <div class="cart-item">
+      ${productImgTag(c, 'cart-item-img', '')}
+      <div class="cart-item-info">
+        <div class="cart-item-name" onclick="toggleCart();navigate('/product/${c.id}')">${c.name}</div>
+        <div class="cart-item-price">${formatINR(c.price*c.qty)}</div>
+        <div class="cart-item-qty">
+          <button class="qty-btn" onclick="changeQty(${c.id},-1)">−</button><span class="qty-num">${c.qty}</span><button class="qty-btn" onclick="changeQty(${c.id},1)">+</button>
+          <button class="remove-btn" onclick="removeFromCart(${c.id})">Remove</button>
+        </div>
+      </div>
+    </div>`).join('');
+  document.getElementById('cartTotal').textContent = formatINR(total);
+  footer.style.display = 'block';
+}
+function toggleCart() {
+  const overlay = document.getElementById('cartOverlay');
+  const drawer = document.getElementById('cartDrawer');
+  const isOpen = drawer.classList.contains('open');
+  if (!isOpen) renderCartItems();
+  overlay.classList.toggle('open', !isOpen);
+  drawer.classList.toggle('open', !isOpen);
+}
+function goToCartPage() { toggleCart(); navigate('/cart'); }
+
+function renderCartPage() {
+  const list = document.getElementById('cartPageList');
+  if (!cart.length) {
+    list.innerHTML = `<div class="cart-empty">Your cart is empty. <a onclick="navigate('/category/all')" style="color:var(--primary);cursor:pointer">Start shopping →</a></div>`;
+  } else {
+    list.innerHTML = cart.map(c => `
+      <div class="cart-item">
+        ${productImgTag(c, 'cart-item-img', '')}
+        <div class="cart-item-info">
+          <div class="cart-item-name" onclick="navigate('/product/${c.id}')">${c.name}</div>
+          <div class="cart-item-price">${formatINR(c.price*c.qty)}</div>
+          <div class="cart-item-qty">
+            <button class="qty-btn" onclick="changeQty(${c.id},-1)">−</button><span class="qty-num">${c.qty}</span><button class="qty-btn" onclick="changeQty(${c.id},1)">+</button>
+            <button class="remove-btn" onclick="removeFromCart(${c.id})">Remove</button>
+          </div>
+        </div>
+      </div>`).join('');
+  }
+  const subtotal = cart.reduce((s,c)=>s+c.price*c.qty,0);
+  const shipping = subtotal > 999 || subtotal === 0 ? 0 : 99;
+  document.getElementById('sumSubtotal').textContent = formatINR(subtotal);
+  document.getElementById('sumShipping').textContent = shipping === 0 ? 'FREE' : formatINR(shipping);
+  document.getElementById('sumTotal').textContent = formatINR(subtotal + shipping);
+}
+
+function renderCheckoutSummary() {
+  const box = document.getElementById('checkoutSummary');
+  const subtotal = cart.reduce((s,c)=>s+c.price*c.qty,0);
+  const shipping = subtotal > 999 || subtotal === 0 ? 0 : 99;
+  box.innerHTML = cart.map(c => `<div class="summary-row"><span>${c.name} × ${c.qty}</span><span>${formatINR(c.price*c.qty)}</span></div>`).join('')
+    + `<div class="summary-row"><span>Shipping</span><span>${shipping===0?'FREE':formatINR(shipping)}</span></div>`;
+  document.getElementById('checkoutTotal').textContent = formatINR(subtotal + shipping);
+}
+
+function placeOrder() {
+  const name = document.getElementById('coName').value.trim();
+  const phone = document.getElementById('coPhone').value.trim();
+  const address = document.getElementById('coAddress').value.trim();
+  const city = document.getElementById('coCity').value.trim();
+  if (!name || !phone || !address || !city) { showToast('Please fill all required fields'); return; }
+  if (!cart.length) { showToast('Your cart is empty'); return; }
+
+  const payment = document.getElementById('coPayment').value;
+  const subtotal = cart.reduce((s,c)=>s+c.price*c.qty,0);
+  const shipping = subtotal > 999 ? 0 : 99;
+  const total = subtotal + shipping;
+  const orderId = 'ZIB' + Date.now();
+
+  pushPurchase(orderId, total, payment);
+  cart = [];
+  updateCartUI();
+  navigate('/thankyou/' + orderId);
+}
+
+/* ========================================================
+
+/* =========================================================
+   CONTACT FORM (form_initiated / form_submitted)
+   form_initiated fires when the /support page itself loads (see showSupport)
+   ========================================================= */
+function submitDetailsForm() {
+  const name = document.getElementById('fName').value.trim();
+  const phone = document.getElementById('fPhone').value.trim();
+  const age = document.getElementById('fAge').value.trim();
+  const address = document.getElementById('fAddress').value.trim();
+  const city = document.getElementById('fCity').value.trim();
+  if (!name || !phone || !age || !address || !city) {
+    showToast('Please fill all fields');
+    pushFormEvent('contact us form', 'form submit - unsuccessful');
+    return;
+  }
+  showToast('Thanks ' + name + '! Your details were submitted.');
+  pushFormEvent('contact us form', 'form submit - successful');
+  ['fName','fPhone','fAge','fAddress','fCity'].forEach(id => document.getElementById(id).value = '');
+  navigate('/');
+}
+
+/* =========================================================
+   TOAST + INIT
+   ========================================================= */
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+router(); // initial render based on whatever is in the URL
+</script>
+</body>
+</html>
