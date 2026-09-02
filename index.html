@@ -285,6 +285,40 @@
     .product-grid { grid-template-columns:repeat(2,1fr); gap:12px; }
   }
   @media (max-width:700px) { .hide-sm { display:none; } }
+  /* ACCOUNT BUTTON (matches btn-cart / btn-form-open style) */
+  .btn-account { background:none; border:none; padding:0; font-weight:600; font-size:12px; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:4px; position:relative; color:var(--text); letter-spacing:.3px; }
+  .btn-account:hover { color:var(--accent); }
+  .account-wrap { position:relative; }
+  .account-dropdown { display:none; position:absolute; top:calc(100% + 16px); right:0; background:#fff; border:1px solid var(--gray2); box-shadow:var(--shadow); min-width:220px; padding:16px; z-index:150; border-radius:var(--radius); }
+  .account-dropdown.show { display:block; }
+  .account-dropdown .who { font-size:13px; font-weight:700; margin-bottom:2px; }
+  .account-dropdown .email, .account-dropdown .phone { font-size:12px; color:var(--text2); margin-bottom:10px; word-break:break-all; }
+  .btn-logout { width:100%; background:var(--gray); border:1px solid var(--gray2); color:var(--text); padding:9px; border-radius:var(--radius); font-weight:600; font-size:12.5px; cursor:pointer; }
+  .btn-logout:hover { background:var(--gray2); }
+
+  /* AUTH MODAL */
+  .auth-overlay { display:none; position:fixed; inset:0; background:rgba(23,35,55,.6); z-index:300; align-items:center; justify-content:center; padding:16px; }
+  .auth-overlay.show { display:flex; }
+  .auth-modal { background:#fff; border-radius:var(--radius); width:100%; max-width:400px; box-shadow:0 20px 60px rgba(0,0,0,.3); overflow:hidden; position:relative; }
+  .auth-close { position:absolute; top:14px; right:14px; background:none; border:none; font-size:18px; cursor:pointer; color:var(--text2); z-index:2; }
+  .auth-head { background:var(--dark); color:#fff; padding:26px 28px 20px; }
+  .auth-head .name { font-family:'Sora',sans-serif; font-weight:800; font-size:20px; letter-spacing:1px; margin-bottom:6px; }
+  .auth-head .name span { color:var(--gold); }
+  .auth-head p { font-size:13px; color:#b7c0d1; }
+  .auth-body { padding:22px 28px 28px; }
+  .auth-field { margin-bottom:14px; }
+  .auth-field label { display:block; font-size:12.5px; font-weight:600; margin-bottom:6px; color:var(--text); }
+  .auth-field input { width:100%; padding:11px 13px; border:1.5px solid var(--gray2); border-radius:var(--radius); font-size:14px; font-family:inherit; outline:none; }
+  .auth-field input:focus { border-color:var(--primary); }
+  .auth-field .hint { font-size:11px; color:var(--text2); margin-top:4px; }
+  .auth-error { background:#fff1f1; color:var(--danger); font-size:12.5px; padding:9px 12px; border-radius:var(--radius); margin-bottom:14px; display:none; }
+  .auth-error.show { display:block; }
+  .btn-auth-submit { width:100%; background:var(--primary); color:#fff; border:none; padding:13px; border-radius:var(--radius); font-weight:700; font-size:14.5px; cursor:pointer; font-family:inherit; }
+  .btn-auth-submit:hover { background:var(--primary-dark); }
+  .auth-switch { text-align:center; font-size:13px; color:var(--text2); margin-top:18px; }
+  .auth-switch a { color:var(--primary); font-weight:700; cursor:pointer; text-decoration:none; }
+  .auth-panel { display:none; }
+  .auth-panel.active { display:block; }
 </style>
 </head>
 <body>
@@ -313,7 +347,17 @@
       <input type="text" id="searchInput" placeholder="Search products, brands and more..." onkeydown="if(event.key==='Enter')runSearch()">
       <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" onclick="runSearch()"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     </div>
-    <div class="header-actions">      <button class="btn-form-open" onclick="toggleWishlistPanel()"><span class="icon-glyph">♡</span>Wishlist</button>
+    <div class="header-actions">
+      <div class="account-wrap">
+        <button class="btn-account" id="accountBtn" onclick="onAccountBtnClick()"></button>
+        <div class="account-dropdown" id="accountDropdown">
+          <div class="who" id="ddName"></div>
+          <div class="email" id="ddEmail"></div>
+          <div class="phone" id="ddPhone"></div>
+          <button class="btn-logout" onclick="logoutUser()">Log out</button>
+        </div>
+      </div>
+      <button class="btn-form-open" onclick="toggleWishlistPanel()"><span class="icon-glyph">♡</span>Wishlist</button>
       <button class="btn-cart" onclick="toggleCart()"><span class="icon-glyph">🛍</span>Cart<span class="cart-badge" id="cartBadge" style="display:none">0</span></button>
     </div>
   </div>
@@ -529,6 +573,63 @@
       <button class="btn-view-cart" onclick="goToCartPage()">View Cart</button>
       <button class="btn-checkout" onclick="toggleCart();navigate('/checkout')">Checkout</button>
     </div>
+  </div>
+</div>
+
+<!-- AUTH MODAL (Login / Signup) -->
+<div class="auth-overlay" id="authOverlay" onclick="if(event.target===this) closeAuth()">
+  <div class="auth-modal">
+    <button class="auth-close" onclick="closeAuth()">✕</button>
+
+    <div class="auth-panel active" id="loginPanel">
+      <div class="auth-head">
+        <div class="name">ZIBRORA<span>.</span></div>
+        <p>Log in with your email to continue</p>
+      </div>
+      <div class="auth-body">
+        <div class="auth-error" id="loginError"></div>
+        <div class="auth-field">
+          <label for="loginEmail">Email address</label>
+          <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email">
+        </div>
+        <div class="auth-field">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <button class="btn-auth-submit" onclick="loginUser()">Log In</button>
+        <div class="auth-switch">New here? <a onclick="switchAuth('signup')">Create an account</a></div>
+      </div>
+    </div>
+
+    <div class="auth-panel" id="signupPanel">
+      <div class="auth-head">
+        <div class="name">ZIBRORA<span>.</span></div>
+        <p>Join ZIBRORA for faster checkout &amp; order tracking</p>
+      </div>
+      <div class="auth-body">
+        <div class="auth-error" id="signupError"></div>
+        <div class="auth-field">
+          <label for="signupName">Full name</label>
+          <input type="text" id="signupName" placeholder="Jane Doe" autocomplete="name">
+        </div>
+        <div class="auth-field">
+          <label for="signupEmail">Email address</label>
+          <input type="email" id="signupEmail" placeholder="you@example.com" autocomplete="email">
+          <div class="hint">Used as your primary account ID</div>
+        </div>
+        <div class="auth-field">
+          <label for="signupPhone">Phone number</label>
+          <input type="tel" id="signupPhone" placeholder="+91 98765 43210" autocomplete="tel">
+        </div>
+        <div class="auth-field">
+          <label for="signupPassword">Password</label>
+          <input type="password" id="signupPassword" placeholder="Min. 6 characters" autocomplete="new-password">
+        </div>
+        <button class="btn-auth-submit" onclick="signupUser()">Create Account</button>
+        <div class="auth-switch">Already have an account? <a onclick="switchAuth('login')">Log in</a></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -795,6 +896,7 @@ function renderReviewsSection(p) {
    ========================================================= */
 window.adobeDataLayer = window.adobeDataLayer || [];
 let isLoggedIn = false;
+let currentUser = null; // { name, email, phone } - set by loginUser()/signupUser(), restored from localStorage session
 let prevPageName = '';
 let prevPageURL = '';
 
@@ -880,7 +982,7 @@ function pushDataLayer(eventType, overrides) {
         auth_type: isLoggedIn ? 'email' : 'not applicable'
       },
       profile: {
-        email: isLoggedIn ? 'admin@zibrora-demo.local' : 'not applicable',
+        email: isLoggedIn && currentUser ? currentUser.email : 'not applicable',
         internal_user: 'external user',
         sf_contact_id: 'not applicable'
       }
@@ -1616,6 +1718,143 @@ function submitDetailsForm() {
 }
 
 /* =========================================================
+   AUTH: SIGNUP / LOGIN / SESSION
+   Primary ID for AEP = email. Phone captured as secondary identifier.
+   Wires into isLoggedIn / currentUser used by pushDataLayer() above,
+   so every subsequent event carries the real signed-in profile.
+   ========================================================= */
+const USERS_KEY = 'zibrora_users';       // { email: {name, email, phone, password} }
+const SESSION_KEY = 'zibrora_session';   // email of logged-in user
+
+function getUsers() {
+  try { return JSON.parse(localStorage.getItem(USERS_KEY)) || {}; }
+  catch(e) { return {}; }
+}
+function saveUsers(users) { localStorage.setItem(USERS_KEY, JSON.stringify(users)); }
+
+function restoreSession() {
+  const email = localStorage.getItem(SESSION_KEY);
+  if (!email) return;
+  const users = getUsers();
+  if (users[email]) { currentUser = users[email]; isLoggedIn = true; }
+}
+
+function isValidEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+function isValidPhone(v) { return /^[0-9+()\-\s]{7,16}$/.test(v); }
+
+function openAuth(panel) {
+  document.getElementById('authOverlay').classList.add('show');
+  switchAuth(panel || 'login');
+}
+function closeAuth() {
+  document.getElementById('authOverlay').classList.remove('show');
+  ['loginError','signupError'].forEach(id => {
+    const el = document.getElementById(id);
+    el.classList.remove('show'); el.textContent = '';
+  });
+}
+function switchAuth(which) {
+  document.getElementById('loginPanel').classList.toggle('active', which==='login');
+  document.getElementById('signupPanel').classList.toggle('active', which==='signup');
+}
+function showAuthError(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.classList.add('show');
+}
+
+function signupUser() {
+  const name = document.getElementById('signupName').value.trim();
+  const email = document.getElementById('signupEmail').value.trim().toLowerCase();
+  const phone = document.getElementById('signupPhone').value.trim();
+  const password = document.getElementById('signupPassword').value;
+
+  if (!name || !email || !phone || !password) return showAuthError('signupError', 'Please fill in all fields.');
+  if (!isValidEmail(email)) return showAuthError('signupError', 'Enter a valid email address.');
+  if (!isValidPhone(phone)) return showAuthError('signupError', 'Enter a valid phone number.');
+  if (password.length < 6) return showAuthError('signupError', 'Password must be at least 6 characters.');
+
+  const users = getUsers();
+  if (users[email]) return showAuthError('signupError', 'An account with this email already exists. Please log in.');
+
+  users[email] = { name, email, phone, password };
+  saveUsers(users);
+  localStorage.setItem(SESSION_KEY, email);
+  currentUser = users[email];
+  isLoggedIn = true;
+
+  pushDataLayer('sign-up', {
+    section: 'account', subsection: 'sign-up',
+    click: { name: 'create account', type: 'submit', page_section: 'modal:auth', nav_section: 'header:account', action: 'sign up successful' },
+    form: { name: 'sign up form', step: 'form submit - successful' }
+  });
+  closeAuth();
+  renderAccountUI();
+  showToast(`🎉 Welcome, ${name}! Account created.`);
+}
+
+function loginUser() {
+  const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+  const password = document.getElementById('loginPassword').value;
+
+  if (!email || !password) return showAuthError('loginError', 'Please enter email and password.');
+  const users = getUsers();
+  const user = users[email];
+  if (!user || user.password !== password) return showAuthError('loginError', 'Incorrect email or password.');
+
+  localStorage.setItem(SESSION_KEY, email);
+  currentUser = user;
+  isLoggedIn = true;
+
+  pushDataLayer('login', {
+    section: 'account', subsection: 'sign-in',
+    click: { name: 'log in', type: 'submit', page_section: 'modal:auth', nav_section: 'header:account', action: 'login successful' },
+    form: { name: 'sign in form', step: 'form submit - successful' }
+  });
+  closeAuth();
+  renderAccountUI();
+  showToast(`👋 Welcome back, ${user.name}!`);
+}
+
+function logoutUser() {
+  localStorage.removeItem(SESSION_KEY);
+  pushDataLayer('logout', {
+    section: 'account', subsection: 'sign-out',
+    click: { name: 'log out', type: 'button', page_section: 'header:account', nav_section: 'header:account', action: 'logout' }
+  });
+  currentUser = null;
+  isLoggedIn = false;
+  document.getElementById('accountDropdown').classList.remove('show');
+  renderAccountUI();
+  showToast('You have been logged out.');
+}
+
+function onAccountBtnClick() {
+  if (!isLoggedIn || !currentUser) { openAuth('login'); return; }
+  document.getElementById('accountDropdown').classList.toggle('show');
+}
+
+function renderAccountUI() {
+  const btn = document.getElementById('accountBtn');
+  if (isLoggedIn && currentUser) {
+    btn.innerHTML = `<span class="icon-glyph">👤</span>${currentUser.name.split(' ')[0]}`;
+    document.getElementById('ddName').textContent = currentUser.name;
+    document.getElementById('ddEmail').textContent = '✉ ' + currentUser.email;
+    document.getElementById('ddPhone').textContent = '📱 ' + currentUser.phone;
+  } else {
+    btn.innerHTML = `<span class="icon-glyph">👤</span>Login`;
+    document.getElementById('accountDropdown').classList.remove('show');
+  }
+}
+
+document.addEventListener('click', function(e) {
+  const wrap = document.querySelector('.account-wrap');
+  if (wrap && !wrap.contains(e.target)) {
+    document.getElementById('accountDropdown').classList.remove('show');
+  }
+});
+
+/* =========================================================
    TOAST + INIT
    ========================================================= */
 let toastTimer;
@@ -1627,6 +1866,8 @@ function showToast(msg) {
   toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
 }
 
+restoreSession();
+renderAccountUI();
 router(); // initial render based on whatever is in the URL
 </script>
 </body>
