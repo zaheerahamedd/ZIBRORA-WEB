@@ -573,6 +573,7 @@
       <div style="display:flex;justify-content:space-between;align-items:center;margin:36px 0 16px;flex-wrap:wrap;gap:10px">
         <h3 style="font-size:16px">Login Activity Log</h3>
         <button class="btn-logout" onclick="exportLoginLogCSV()">⬇ Export Login Log CSV</button>
+        <button class="btn-logout" onclick="exportLoginLogJSON()" style="margin-left:8px">⬇ Export Login Log JSON</button>
       </div>
       <p class="section-sub" style="margin-bottom:14px">Every time someone logs in or signs up, their email and phone are recorded here with a timestamp.</p>
       <div style="overflow-x:auto">
@@ -1788,14 +1789,29 @@ const USERS_KEY = 'zibrora_users';       // { email: {name, email, phone, passwo
 const SESSION_KEY = 'zibrora_session';   // email of logged-in user
 const LOGIN_LOG_KEY = 'zibrora_login_log'; // [{name, email, phone, type, time}] - every login/signup event, newest first
 
+/* Google Apps Script Web App URL - every login/signup also syncs here into your Google Sheet */
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzOThbGDY7Pm8VPicsdjGFNYFPp7H_vif_Z9ULstJrsrX91ZfJTtIKXzYZOxWYh3W6-wQ/exec';
+
+function sendToGoogleSheet(entry) {
+  if (!GOOGLE_SCRIPT_URL) return; // not configured - safe no-op
+  fetch(GOOGLE_SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',              // Apps Script doesn't send CORS headers; no-cors lets the write still go through
+    headers: { 'Content-Type': 'text/plain' }, // avoids a CORS preflight
+    body: JSON.stringify(entry)
+  }).catch(function(err) { console.warn('Google Sheet sync failed (data is still safe in localStorage):', err); });
+}
+
 function getLoginLog() {
   try { return JSON.parse(localStorage.getItem(LOGIN_LOG_KEY)) || []; }
   catch(e) { return []; }
 }
 function logLoginEvent(user, type) {
+  const entry = { name: user.name, email: user.email, phone: user.phone, type: type, time: new Date().toISOString() };
   const log = getLoginLog();
-  log.unshift({ name: user.name, email: user.email, phone: user.phone, type: type, time: new Date().toISOString() });
+  log.unshift(entry);
   localStorage.setItem(LOGIN_LOG_KEY, JSON.stringify(log));
+  sendToGoogleSheet(entry); // pushes the same entry to your shared Google Sheet
 }
 
 function getUsers() {
@@ -2026,6 +2042,16 @@ function exportLoginLogCSV() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url; a.download = 'zibrora-login-activity.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+function exportLoginLogJSON() {
+  const log = getLoginLog();
+  if (!log.length) { showToast('No login activity to export yet.'); return; }
+  const blob = new Blob([JSON.stringify(log, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'zibrora-login-activity.json';
   a.click();
   URL.revokeObjectURL(url);
 }
