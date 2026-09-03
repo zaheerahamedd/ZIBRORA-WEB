@@ -535,6 +535,65 @@
   </main>
 </section>
 
+<!-- ADMIN PANEL (owner only - customer login/signup data) -->
+<section class="page-section" id="page-admin">
+  <main class="main">
+    <div class="section-header"><h2>Site Admin — Customer Data</h2></div>
+    <p class="section-sub">Password-protected. Only you (the site owner) should have this password.</p>
+    <div id="adminLocked" style="max-width:360px;margin:30px 0;">
+      <div class="auth-field">
+        <label for="adminPassInput">Admin password</label>
+        <input type="password" id="adminPassInput" placeholder="Enter admin password" onkeydown="if(event.key==='Enter') unlockAdmin()">
+      </div>
+      <div class="auth-error" id="adminError"></div>
+      <button class="btn-auth-submit" style="width:auto;padding:11px 24px" onclick="unlockAdmin()">Unlock</button>
+    </div>
+    <div id="adminUnlocked" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+        <div style="font-size:13px;color:var(--text2)">Data is stored locally in this browser (localStorage), not on a server.</div>
+        <div style="display:flex;gap:10px">
+          <button class="btn-logout" onclick="exportUsersCSV()">⬇ Export Customers CSV</button>
+          <button class="btn-logout" onclick="lockAdmin()">🔒 Lock</button>
+        </div>
+      </div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;background:#fff;box-shadow:var(--shadow)">
+          <thead>
+            <tr style="background:var(--dark);color:#fff;text-align:left">
+              <th style="padding:12px 14px;font-size:12.5px">#</th>
+              <th style="padding:12px 14px;font-size:12.5px">Name</th>
+              <th style="padding:12px 14px;font-size:12.5px">Email</th>
+              <th style="padding:12px 14px;font-size:12.5px">Phone</th>
+            </tr>
+          </thead>
+          <tbody id="adminUserTable"></tbody>
+        </table>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin:36px 0 16px;flex-wrap:wrap;gap:10px">
+        <h3 style="font-size:16px">Login Activity Log</h3>
+        <button class="btn-logout" onclick="exportLoginLogCSV()">⬇ Export Login Log CSV</button>
+      </div>
+      <p class="section-sub" style="margin-bottom:14px">Every time someone logs in or signs up, their email and phone are recorded here with a timestamp.</p>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;background:#fff;box-shadow:var(--shadow)">
+          <thead>
+            <tr style="background:var(--dark);color:#fff;text-align:left">
+              <th style="padding:12px 14px;font-size:12.5px">#</th>
+              <th style="padding:12px 14px;font-size:12.5px">Email</th>
+              <th style="padding:12px 14px;font-size:12.5px">Name</th>
+              <th style="padding:12px 14px;font-size:12.5px">Phone</th>
+              <th style="padding:12px 14px;font-size:12.5px">Event</th>
+              <th style="padding:12px 14px;font-size:12.5px">Date &amp; Time</th>
+            </tr>
+          </thead>
+          <tbody id="adminLoginLogTable"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</section>
+
 <footer>
   <div class="footer-inner">
     <div class="footer-brand">
@@ -558,7 +617,7 @@
       <div class="newsletter-form"><input type="email" placeholder="Your email"><button onclick="showToast('Subscribed! Welcome to ZIBRORA.')">Join</button></div>
     </div>
   </div>
-  <div class="footer-bottom"><span>© 2026 ZIBRORA. All rights reserved.</span><span>Privacy Policy · Terms of Service</span></div>
+  <div class="footer-bottom"><span>© 2026 ZIBRORA. All rights reserved.</span><span>Privacy Policy · Terms of Service · <a onclick="navigate('/admin')" style="cursor:pointer;color:inherit;text-decoration:underline">Site Admin</a></span></div>
 </footer>
 
 <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
@@ -1125,6 +1184,8 @@ function router() {
     showThankYou(parts[1]);
   } else if (parts[0] === 'support') {
     showSupport();
+  } else if (parts[0] === 'admin') {
+    showAdmin();
   } else {
     showHome();
   }
@@ -1725,6 +1786,17 @@ function submitDetailsForm() {
    ========================================================= */
 const USERS_KEY = 'zibrora_users';       // { email: {name, email, phone, password} }
 const SESSION_KEY = 'zibrora_session';   // email of logged-in user
+const LOGIN_LOG_KEY = 'zibrora_login_log'; // [{name, email, phone, type, time}] - every login/signup event, newest first
+
+function getLoginLog() {
+  try { return JSON.parse(localStorage.getItem(LOGIN_LOG_KEY)) || []; }
+  catch(e) { return []; }
+}
+function logLoginEvent(user, type) {
+  const log = getLoginLog();
+  log.unshift({ name: user.name, email: user.email, phone: user.phone, type: type, time: new Date().toISOString() });
+  localStorage.setItem(LOGIN_LOG_KEY, JSON.stringify(log));
+}
 
 function getUsers() {
   try { return JSON.parse(localStorage.getItem(USERS_KEY)) || {}; }
@@ -1782,6 +1854,7 @@ function signupUser() {
   localStorage.setItem(SESSION_KEY, email);
   currentUser = users[email];
   isLoggedIn = true;
+  logLoginEvent(currentUser, 'signup');
 
   pushDataLayer('sign-up', {
     section: 'account', subsection: 'sign-up',
@@ -1805,6 +1878,7 @@ function loginUser() {
   localStorage.setItem(SESSION_KEY, email);
   currentUser = user;
   isLoggedIn = true;
+  logLoginEvent(currentUser, 'login');
 
   pushDataLayer('login', {
     section: 'account', subsection: 'sign-in',
@@ -1864,6 +1938,96 @@ function showToast(msg) {
   t.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+/* =========================================================
+   ADMIN PANEL — owner-only view of collected customer data.
+   Change ADMIN_PASSWORD below to your own secret before sharing this site.
+   ========================================================= */
+const ADMIN_PASSWORD = 'zibrora2026';
+
+function showAdmin() {
+  document.getElementById('page-admin').classList.add('active');
+  setBreadcrumb([{label:'Home',path:'/'},{label:'Site Admin'}]);
+  renderNav();
+  document.getElementById('adminLocked').style.display = 'block';
+  document.getElementById('adminUnlocked').style.display = 'none';
+  document.getElementById('adminPassInput').value = '';
+}
+function unlockAdmin() {
+  const val = document.getElementById('adminPassInput').value;
+  const errEl = document.getElementById('adminError');
+  if (val !== ADMIN_PASSWORD) {
+    errEl.textContent = 'Incorrect password.';
+    errEl.classList.add('show');
+    return;
+  }
+  errEl.classList.remove('show');
+  document.getElementById('adminLocked').style.display = 'none';
+  document.getElementById('adminUnlocked').style.display = 'block';
+  renderAdminTable();
+  renderLoginLogTable();
+}
+function lockAdmin() {
+  document.getElementById('adminLocked').style.display = 'block';
+  document.getElementById('adminUnlocked').style.display = 'none';
+  document.getElementById('adminPassInput').value = '';
+}
+function renderAdminTable() {
+  const users = Object.values(getUsers());
+  const tbody = document.getElementById('adminUserTable');
+  if (!users.length) {
+    tbody.innerHTML = `<tr><td colspan="4" style="padding:20px;text-align:center;color:var(--text2)">No customers have signed up yet.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = users.map((u, i) => `
+    <tr style="border-bottom:1px solid var(--gray2)">
+      <td style="padding:12px 14px;font-size:13px">${i + 1}</td>
+      <td style="padding:12px 14px;font-size:13px">${u.name}</td>
+      <td style="padding:12px 14px;font-size:13px">${u.email}</td>
+      <td style="padding:12px 14px;font-size:13px">${u.phone}</td>
+    </tr>`).join('');
+}
+function exportUsersCSV() {
+  const users = Object.values(getUsers());
+  if (!users.length) { showToast('No customer data to export yet.'); return; }
+  let csv = 'Name,Email,Phone\n';
+  users.forEach(u => { csv += `"${u.name}","${u.email}","${u.phone}"\n`; });
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'zibrora-customers.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+function renderLoginLogTable() {
+  const log = getLoginLog();
+  const tbody = document.getElementById('adminLoginLogTable');
+  if (!log.length) {
+    tbody.innerHTML = `<tr><td colspan="6" style="padding:20px;text-align:center;color:var(--text2)">No logins recorded yet.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = log.map((e, i) => `
+    <tr style="border-bottom:1px solid var(--gray2)">
+      <td style="padding:12px 14px;font-size:13px">${i + 1}</td>
+      <td style="padding:12px 14px;font-size:13px">${e.email}</td>
+      <td style="padding:12px 14px;font-size:13px">${e.name}</td>
+      <td style="padding:12px 14px;font-size:13px">${e.phone}</td>
+      <td style="padding:12px 14px;font-size:13px;text-transform:capitalize">${e.type}</td>
+      <td style="padding:12px 14px;font-size:13px">${new Date(e.time).toLocaleString()}</td>
+    </tr>`).join('');
+}
+function exportLoginLogCSV() {
+  const log = getLoginLog();
+  if (!log.length) { showToast('No login activity to export yet.'); return; }
+  let csv = 'Email,Name,Phone,Event,DateTime\n';
+  log.forEach(e => { csv += `"${e.email}","${e.name}","${e.phone}","${e.type}","${new Date(e.time).toLocaleString()}"\n`; });
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'zibrora-login-activity.csv';
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 restoreSession();
